@@ -46,12 +46,19 @@ class ClientHandler implements Runnable {
                         String targetUsername = parts[0].substring("@".length());
                         String messageToSend = parts[1];
                         Server.sendMessageTo(targetUsername, messageToSend, userSender);
-                    } else if (onlyTheMessage.startsWith("/bannir:")) {
+                    } else if (onlyTheMessage.startsWith("/ban:")) {
                         String[] parts = onlyTheMessage.split(" ", 2);
-                        String targetUsername = parts[0].substring("/bannir:".length());
+                        String targetUsername = parts[0].substring("/ban:".length());
+                        Server.broadcastMessage("* "+userSender + " has banned " + targetUsername+" *");
                         Server.addBanned(targetUsername);
+                    }
+                    else if (onlyTheMessage.startsWith("/unBan:")) {
+                        String[] parts = onlyTheMessage.split(" ", 2);
+                        String targetUsername = parts[0].substring("/unBan:".length());
+                        Server.unBan(targetUsername);
+                        Server.broadcastMessage("* "+userSender + " has unbanned " + targetUsername+" *");
 
-                    } else {
+                    }else {
                         //ICI ON SEND POUR LA BASE DE DONNEES
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }

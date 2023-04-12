@@ -32,6 +32,7 @@ public class Server {
                 BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String username = input.readLine();
                 ClientHandler clientHandler = new ClientHandler(clientSocket, clientWriter, username);
+                broadcastMessage(username+" has entered the chat ");
                 clientHandlers.add(clientHandler);
 
                 Thread clientThread = new Thread(clientHandler);
@@ -74,14 +75,15 @@ public class Server {
     public static void addBanned(String username) {
         bannedUser.add(username);
     }
+    public static void unBan(String username) {
+        bannedUser.remove(username);
+    }
 
     public static Boolean IsBanned(String username) {
         for (String banned : bannedUser) {
             if (username.equalsIgnoreCase(banned)) {
                 return true;
             }
-
-
         }
         return false;
     }
