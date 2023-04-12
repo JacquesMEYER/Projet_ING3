@@ -48,7 +48,7 @@ public class Client extends Observable {
     }
 
     public void sendMessage(String message) {
-        out.println(user.getUsername() + "/" + message);
+        out.println(user.getUsername() + "¤" + message);
     }
 
     private void receiveMessage(String message) {

@@ -10,6 +10,7 @@ class ClientHandler implements Runnable {
     private PrintWriter writer;
     private String username;
 
+
     public ClientHandler(Socket clientSocket, PrintWriter writer, String username) {
         this.clientSocket = clientSocket;
         this.writer = writer;
@@ -30,23 +31,31 @@ class ClientHandler implements Runnable {
             BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String message;
 
+            clientSocket.getInetAddress();
+
             while ((message = input.readLine()) != null) {
 
-                String[] parts1 = message.split("/");
+                String[] parts1 = message.split("¤");
                 String userSender = parts1[0];
                 String onlyTheMessage = parts1[1];
+                if (Server.IsBanned(userSender)) {
+                    Server.sendMessageTBanned(userSender);
+                }else {
+                    if (onlyTheMessage.startsWith("@")) {
+                        String[] parts = onlyTheMessage.split(" ", 2);
+                        String targetUsername = parts[0].substring("@".length());
+                        String messageToSend = parts[1];
+                        Server.sendMessageTo(targetUsername, messageToSend, userSender);
+                    } else if (onlyTheMessage.startsWith("/bannir:")) {
+                        String[] parts = onlyTheMessage.split(" ", 2);
+                        String targetUsername = parts[0].substring("/bannir:".length());
+                        Server.addBanned(targetUsername);
 
-                if (onlyTheMessage.startsWith("@")) {
-                    String[] parts = onlyTheMessage.split(" ", 2);
-                    String targetUsername = parts[0].substring("@".length());
-                    String messageToSend = parts[1];
-                    Server.sendMessageTo(targetUsername, messageToSend,userSender);
-                } else {
-                    //ICI ON SEND POUR LA BASE DE DONNEES
-
-                    Server.broadcastMessage(userSender +": " +onlyTheMessage);
+                    } else {
+                        //ICI ON SEND POUR LA BASE DE DONNEES
+                        Server.broadcastMessage(userSender + ": " + onlyTheMessage);
+                    }
                 }
-
                 ///on envoit ici le message a la base de donnés
 
             }
@@ -61,4 +70,11 @@ class ClientHandler implements Runnable {
             }
         }
     }
+
+
+
+
+
+
+
 }

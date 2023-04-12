@@ -15,12 +15,16 @@ public class Server {
     private static final int SERVER_PORT = 8888;
     private static final String SERVER_IP = "192.168.1.49";
 
+    static Set<String> bannedUser = new HashSet<>();
+
     static Set<ClientHandler> clientHandlers = new HashSet<>();
 
     public static void main(String[] args) {
         System.out.println("Démarrage du serveur...");
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT, 50, InetAddress.getByName(SERVER_IP))) {
             while (true) {
+                bannedUser.add("test");
+
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("model.Client connecté : " + clientSocket.getInetAddress());
 
@@ -39,16 +43,18 @@ public class Server {
         }
     }
 
-    public static void sendMessageTo(String username, String message,String userSender) {
+    public static void sendMessageTo(String username, String message, String userSender) {
+
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(username)) {
-                handler.getWriter().println("(private message from "+userSender+") "+message);
+                handler.getWriter().println("(private message from " + userSender + ") " + message);
+
                 break;
             }
         }
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(userSender)) {
-                handler.getWriter().println("(private message to "+username+") "+message);
+                handler.getWriter().println("(private message to " + username + ") " + message);
                 break;
             }
         }
@@ -56,7 +62,34 @@ public class Server {
 
     public static void broadcastMessage(String message) {
         for (ClientHandler handler : clientHandlers) {
-            handler.getWriter().println(message);
+                if (bannedUser.contains(handler.getUsername())) {
+                    handler.getWriter().println("pas de message pour toi, t'es banni!!!!!");
+                } else {
+                    handler.getWriter().println(message);
+                }
+            }
+
+    }
+
+    public static void addBanned(String username) {
+        bannedUser.add(username);
+    }
+
+    public static Boolean IsBanned(String username) {
+        for (String banned : bannedUser) {
+            if (username.equalsIgnoreCase(banned)) {
+                return true;
+            }
+
+
+        }
+        return false;
+    }
+    public static void sendMessageTBanned(String username) {
+        for (ClientHandler handler : clientHandlers) {
+            if(handler.getUsername().equalsIgnoreCase(username)){
+                handler.getWriter().println("pas de message pour toi, t'es banni");
+            }
         }
     }
 }
