@@ -32,7 +32,7 @@ public class Server {
                 BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String username = input.readLine();
                 ClientHandler clientHandler = new ClientHandler(clientSocket, clientWriter, username);
-                broadcastMessage(username+" has entered the chat ");
+                broadcastMessage(username + " has entered the chat ");
                 clientHandlers.add(clientHandler);
 
                 Thread clientThread = new Thread(clientHandler);
@@ -63,18 +63,19 @@ public class Server {
 
     public static void broadcastMessage(String message) {
         for (ClientHandler handler : clientHandlers) {
-                if (bannedUser.contains(handler.getUsername())) {
-                    handler.getWriter().println("pas de message pour toi, t'es banni!!!!!");
-                } else {
-                    handler.getWriter().println(message);
-                }
+            if (bannedUser.contains(handler.getUsername())) {
+                handler.getWriter().println("pas de message pour toi, t'es banni!!!!!");
+            } else {
+                handler.getWriter().println(message);
             }
+        }
 
     }
 
     public static void addBanned(String username) {
         bannedUser.add(username);
     }
+
     public static void unBan(String username) {
         bannedUser.remove(username);
     }
@@ -87,10 +88,30 @@ public class Server {
         }
         return false;
     }
+
     public static void sendMessageTBanned(String username) {
         for (ClientHandler handler : clientHandlers) {
-            if(handler.getUsername().equalsIgnoreCase(username)){
+            if (handler.getUsername().equalsIgnoreCase(username)) {
                 handler.getWriter().println("pas de message pour toi, t'es banni");
+            }
+        }
+    }
+
+    public static void afficherQuiEstCo(String userSender) {
+
+        String noms = "";
+        int i=0;
+        for (ClientHandler handler : clientHandlers) { //pour eviter l espace au debut
+            if(i==0){
+                noms = noms + handler.getUsername();
+            }else noms=noms +" "+ handler.getUsername();
+            i++;
+            }
+        System.out.println(noms);
+        System.out.println(userSender);
+        for (ClientHandler handler : clientHandlers) {
+            if (handler.getUsername().equalsIgnoreCase(userSender)) {
+                handler.getWriter().println("les utilisateurs co sont : " + noms);
             }
         }
     }

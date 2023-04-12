@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+
 class ClientHandler implements Runnable {
     private Socket clientSocket;
     private PrintWriter writer;
@@ -40,7 +41,7 @@ class ClientHandler implements Runnable {
                 String onlyTheMessage = parts1[1];
                 if (Server.IsBanned(userSender)) {
                     Server.sendMessageTBanned(userSender);
-                }else {
+                } else {
                     if (onlyTheMessage.startsWith("@")) {
                         String[] parts = onlyTheMessage.split(" ", 2);
                         String targetUsername = parts[0].substring("@".length());
@@ -49,16 +50,17 @@ class ClientHandler implements Runnable {
                     } else if (onlyTheMessage.startsWith("/ban:")) {
                         String[] parts = onlyTheMessage.split(" ", 2);
                         String targetUsername = parts[0].substring("/ban:".length());
-                        Server.broadcastMessage("* "+userSender + " has banned " + targetUsername+" *");
+                        Server.broadcastMessage("* " + userSender + " has banned " + targetUsername + " *");
                         Server.addBanned(targetUsername);
-                    }
-                    else if (onlyTheMessage.startsWith("/unBan:")) {
+                    } else if (onlyTheMessage.startsWith("/unBan:")) {
                         String[] parts = onlyTheMessage.split(" ", 2);
                         String targetUsername = parts[0].substring("/unBan:".length());
                         Server.unBan(targetUsername);
-                        Server.broadcastMessage("* "+userSender + " has unbanned " + targetUsername+" *");
-
-                    }else {
+                        Server.broadcastMessage("* " + userSender + " has unbanned " + targetUsername + " *");
+                    } else if (onlyTheMessage.startsWith("/quiCo")) {
+                        Server.afficherQuiEstCo(userSender);
+                    }
+                    else {
                         //ICI ON SEND POUR LA BASE DE DONNEES
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }
@@ -77,11 +79,6 @@ class ClientHandler implements Runnable {
             }
         }
     }
-
-
-
-
-
 
 
 }

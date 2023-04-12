@@ -41,11 +41,14 @@ public class pageAcceuil extends JFrame implements ActionListener , Observer {
 
 
 
-
+/*
         JLabel searchLabel = new JLabel("Rechercher un utilisateur");
         leftPanel.add(searchLabel, BorderLayout.SOUTH);
         JTextField searchField = new JTextField();
         leftPanel.add(searchField, BorderLayout.SOUTH);
+
+
+ */
         mainPanel.add(leftPanel, BorderLayout.WEST);
 
 
