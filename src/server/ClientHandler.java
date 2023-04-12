@@ -34,7 +34,7 @@ class ClientHandler implements Runnable {
 
             clientSocket.getInetAddress();
 
-            while ((message = input.readLine()) != null) {
+            while ((message  = input.readLine()) != null) {
 
                 String[] parts1 = message.split("¤");
                 String userSender = parts1[0];
