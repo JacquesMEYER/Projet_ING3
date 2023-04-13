@@ -33,6 +33,8 @@ public class Server {
                 String username = input.readLine();
                 ClientHandler clientHandler = new ClientHandler(clientSocket, clientWriter, username);
                 broadcastMessage(username + " has entered the chat ");
+                 //  broadcastMessage("/quiCo");
+
                 clientHandlers.add(clientHandler);
 
                 Thread clientThread = new Thread(clientHandler);
@@ -111,7 +113,25 @@ public class Server {
         System.out.println(userSender);
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(userSender)) {
-                handler.getWriter().println("les utilisateurs co sont : " + noms);
+                handler.getWriter().println("co:" + noms);
+            }
+        }
+    }
+    public static void afficherQuiEstCo2(String userSender) {
+
+        String noms = "";
+        int i=0;
+        for (ClientHandler handler : clientHandlers) { //pour eviter l espace au debut
+            if(i==0){
+                noms = noms + handler.getUsername();
+            }else noms=noms +" "+ handler.getUsername();
+            i++;
+        }
+        System.out.println(noms);
+        System.out.println(userSender);
+        for (ClientHandler handler : clientHandlers) {
+            if (handler.getUsername().equalsIgnoreCase(userSender)) {
+                handler.getWriter().println("les utilisateurs co sont :" + noms);
             }
         }
     }

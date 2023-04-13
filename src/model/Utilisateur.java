@@ -8,6 +8,8 @@ public class Utilisateur {
     public enum Status {ONLINE,OFFLINE,AWAY,DEMARRED}
     public enum userType {CLASSIC,MODERATOR,ADMINISTRATOR}
     private Status status;
+    private userType userType;
+
     Utilisateur(String pseudo,String mdp){
         this.username=pseudo;
         this.password=mdp;
@@ -27,5 +29,13 @@ public class Utilisateur {
 
     public void changementStatut(Status status){
         this.status=status;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Utilisateur.userType getUserType() {
+        return userType;
     }
 }

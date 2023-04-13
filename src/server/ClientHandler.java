@@ -60,12 +60,15 @@ class ClientHandler implements Runnable {
                     } else if (onlyTheMessage.startsWith("/quiCo")) {
                         Server.afficherQuiEstCo(userSender);
                     }
+                    else if (onlyTheMessage.startsWith("/co")) {
+                    Server.afficherQuiEstCo2(userSender);
+                    }
                     else {
-                        //ICI ON SEND POUR LA BASE DE DONNEES
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }
+                  Server.afficherQuiEstCo(userSender);
                 }
-                ///on envoit ici le message a la base de donnés
+
 
             }
         } catch (IOException e) {

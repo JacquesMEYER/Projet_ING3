@@ -70,6 +70,7 @@ public class LoginPage extends JFrame implements ActionListener, Observer {
                 JOptionPane.showMessageDialog(this, "Connexion sucess !");
 
                 MessageController messageController = new MessageController(loginController.getModel());
+                //ajouter mon nom dans le tab de nom du controller
                 pageAcceuil view2 = new pageAcceuil(messageController);
                 messageController.setView(view2);
                 dispose();

@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import java.util.Observable;
 
 public class Client extends Observable {
-    private Utilisateur user = new Utilisateur("jk", "mdp");
+    private Utilisateur user = new Utilisateur("jac", "mdp");
     private static final String SERVER_IP = "192.168.1.49";
     private static final int SERVER_PORT = 8888;
 
