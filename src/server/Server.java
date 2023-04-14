@@ -32,7 +32,7 @@ public class Server {
                 BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String username = input.readLine();
                 ClientHandler clientHandler = new ClientHandler(clientSocket, clientWriter, username);
-                broadcastMessage(username + " has entered the chat ");
+                broadcastMessage("* "+username + " has entered the chat *");
                 //Server.afficherQuiEstCo();
 
                 clientHandlers.add(clientHandler);
