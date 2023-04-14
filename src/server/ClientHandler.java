@@ -66,7 +66,7 @@ class ClientHandler implements Runnable {
                     } else {
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }
-                    //Server.afficherQuiEstCo();
+                   Server.afficherQuiEstCo();
                 }
 
             }

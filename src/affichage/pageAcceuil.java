@@ -118,7 +118,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
         // Ajout du panneau principal à la fenêtre
         setContentPane(mainPanel);
-        pack();
+
         setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
