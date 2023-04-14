@@ -1,30 +1,39 @@
 package affichage;
+
 import controller.MessageController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Vector;
+import javax.swing.Timer;
 
 public class pageAcceuil extends JFrame implements ActionListener {
-   private static MessageController messageController;
-     JTextArea chatArea;
+    private static MessageController messageController;
+    JTextArea chatArea;
     JPanel userButtonsPanel;
-     JTextField messageField;
-     JButton sendButton;
+    JTextField messageField;
+    JButton sendButton;
     Vector<JButton> userButtons;
     //static Set<String> nomsCo = new HashSet<>(Arrays.asList("jac","rom","alix","ethan"));
     private static Set<String> nomsCo = new HashSet<>(Arrays.asList("jac"));
 
-    public void updateUserButtons(Set<String> nomsCo, JPanel userButtonsPanel,Set<String> vrmtCo) {
+    public void updateUserButtons(Set<String> nomsCo, JPanel userButtonsPanel, Set<String> vrmtCo) {
 
         userButtonsPanel.removeAll();
+        String nomV2 = "";
         for (String nom : nomsCo) {
-            JButton userButton = new JButton(nom);
-            if(vrmtCo.contains(nom)) {
+            if (nom == messageController.getModel().getUser().getUsername()) {
+                nomV2 = nom + " (me)";
+            } else nomV2 = nom;
+            JButton userButton = new JButton(nomV2);
+            if (vrmtCo.contains(nom)) {
                 userButton.setBackground(Color.GREEN);
-            }else userButton.setBackground(Color.PINK);
+            } else userButton.setBackground(Color.PINK);
             userButtons.add(userButton);
 
             userButtonsPanel.add(userButton);
@@ -65,18 +74,18 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
         for (String nom : nomsCo) {
             JButton userButton = new JButton(nom);
-                userButtons.add(userButton); //ajout au vecteur
-                userButtonsPanel.add(userButton);// ajout du vecteur au left pannel
+            userButtons.add(userButton); //ajout au vecteur
+            userButtonsPanel.add(userButton);// ajout du vecteur au left pannel
             userButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Fermer la page d'accueil lorsqu'un bouton utilisateur est cliqué
-                    parametter parametter = new parametter(userButton.getText(),messageController);
+                    parametter parametter = new parametter(userButton.getText(), messageController);
                     parametter.setVisible(true);
                 }
             });
-    }
-        leftPanel.add(userButtonsPanel,BorderLayout.CENTER);
+        }
+        leftPanel.add(userButtonsPanel, BorderLayout.CENTER);
         mainPanel.add(leftPanel, BorderLayout.WEST);
 
 
@@ -96,13 +105,10 @@ public class pageAcceuil extends JFrame implements ActionListener {
         bottomPanel.add(messageField, BorderLayout.CENTER);
         sendButton = new JButton("Envoyer");
 
-
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 sendMessage(messageField.getText());
-                nomsCo = messageController.getNomsCo();
-
             }
         });
 
@@ -116,8 +122,11 @@ public class pageAcceuil extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        startTimer();
+
     }
-        private void sendMessage(String mess) {
+
+    private void sendMessage(String mess) {
 
         String message = messageField.getText();
         //chatArea.append("Moi : " + mess + "\n");
@@ -129,12 +138,10 @@ public class pageAcceuil extends JFrame implements ActionListener {
         chatArea.append(message + "\n");
     }
 
-    public  void setNomsCo(Set<String> nomsCo) {
+    public void setNomsCo(Set<String> nomsCo) {
         pageAcceuil.nomsCo = nomsCo;
     }
 
-
-    //jsp a quoi servent
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -143,6 +150,17 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
     public JPanel getUserButtonsPanel() {
         return userButtonsPanel;
+    }
+
+    public void startTimer() {
+        Timer timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                nomsCo = messageController.getNomsCo();
+                updateUserButtons(nomsCo, userButtonsPanel, messageController.getVrmtCo());
+            }
+        });
+        timer.start();
     }
 
 }

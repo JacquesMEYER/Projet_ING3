@@ -33,8 +33,10 @@ class ClientHandler implements Runnable {
             String message;
 
             clientSocket.getInetAddress();
+            Server.afficherQuiEstCo();
 
-            while ((message  = input.readLine()) != null) {
+
+            while ((message = input.readLine()) != null) {
 
                 String[] parts1 = message.split("¤");
                 String userSender = parts1[0];
@@ -58,23 +60,23 @@ class ClientHandler implements Runnable {
                         Server.unBan(targetUsername);
                         Server.broadcastMessage("* " + userSender + " has unbanned " + targetUsername + " *");
                     } else if (onlyTheMessage.startsWith("/quiCo")) {
-                        Server.afficherQuiEstCo(userSender);
-                    }
-                    else if (onlyTheMessage.startsWith("/co")) {
-                    Server.afficherQuiEstCo2(userSender);
-                    }
-                    else {
+                        Server.afficherQuiEstCo();
+                    } else if (onlyTheMessage.startsWith("/co")) {
+                        Server.afficherQuiEstCo2(userSender);
+                    } else {
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }
-                  Server.afficherQuiEstCo(userSender);
+                    //Server.afficherQuiEstCo();
                 }
-
 
             }
         } catch (IOException e) {
             System.err.println("Erreur lors de la réception du message : " + e.getMessage());
         } finally {
+            Server.broadcastMessage("* " + username + " has left the chat *");
             Server.clientHandlers.remove(this);
+            Server.afficherQuiEstCo(); //mettre a jour les boutons des autres
+
             try {
                 clientSocket.close();
             } catch (IOException e) {

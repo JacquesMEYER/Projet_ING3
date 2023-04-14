@@ -3,7 +3,6 @@ package controller;
 import affichage.pageAcceuil;
 import model.Client;
 
-import javax.swing.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Observable;
@@ -12,7 +11,9 @@ import java.util.Set;
 public class MessageController extends BaseController {
 
     private pageAcceuil view;
-    private Set<String> nomsCo =new HashSet<>(Arrays.asList(model.getUser().getUsername()));
+    private Set<String> nomsCo = new HashSet<>(Arrays.asList(model.getUser().getUsername()));
+    private Set<String> vrmtCo = new HashSet<>();
+
 
     public MessageController(Client model) {
         super(model);
@@ -32,13 +33,10 @@ public class MessageController extends BaseController {
         return nomsCo;
     }
 
-/*
-    public void updateUserButtons(Set<String> nomsCo, JPanel userButtonsPanel) {
-        view.updateUserButtons(nomsCo, userButtonsPanel);
+    public Set<String> getVrmtCo() {
+        return vrmtCo;
     }
 
-
- */
     @Override
     public void update(Observable o, Object arg) {
         String message = (String) arg;
@@ -46,9 +44,9 @@ public class MessageController extends BaseController {
         if (message.startsWith("co:")) {
             String[] noms = message.substring("co:".length()).split(" ");
             nomsCo.addAll(Arrays.asList(noms));
-            Set<String> vrmtCo = new HashSet<>(Arrays.asList(noms));
+            vrmtCo = new HashSet<>(Arrays.asList(noms));
             view.setNomsCo(nomsCo);
-            view.updateUserButtons(nomsCo, view.getUserButtonsPanel(),vrmtCo); // Appelez la méthode updateUserButtons ici
+            view.updateUserButtons(nomsCo, view.getUserButtonsPanel(), vrmtCo); // Appelez la méthode updateUserButtons ici
         } else view.addMessage(message);
     }
 

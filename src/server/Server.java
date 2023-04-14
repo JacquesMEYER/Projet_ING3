@@ -33,7 +33,7 @@ public class Server {
                 String username = input.readLine();
                 ClientHandler clientHandler = new ClientHandler(clientSocket, clientWriter, username);
                 broadcastMessage(username + " has entered the chat ");
-                 //  broadcastMessage("/quiCo");
+                //Server.afficherQuiEstCo();
 
                 clientHandlers.add(clientHandler);
 
@@ -99,25 +99,25 @@ public class Server {
         }
     }
 
-    public static void afficherQuiEstCo(String userSender) {
+    public static void afficherQuiEstCo() { //sans affichage , que pour les boutons
 
         String noms = "";
         int i=0;
-        for (ClientHandler handler : clientHandlers) { //pour eviter l espace au debut
+        for (ClientHandler handler : clientHandlers) {
             if(i==0){
                 noms = noms + handler.getUsername();
             }else noms=noms +" "+ handler.getUsername();
             i++;
             }
-        System.out.println(noms);
-        System.out.println(userSender);
+       // System.out.println(noms);
+        //System.out.println(userSender);
         for (ClientHandler handler : clientHandlers) {
-            if (handler.getUsername().equalsIgnoreCase(userSender)) {
+           // if (handler.getUsername().equalsIgnoreCase(userSender)) {
                 handler.getWriter().println("co:" + noms);
-            }
+            //}
         }
     }
-    public static void afficherQuiEstCo2(String userSender) {
+    public static void afficherQuiEstCo2(String userSender) { //qui affiche dans la ocnv qui est co
 
         String noms = "";
         int i=0;
