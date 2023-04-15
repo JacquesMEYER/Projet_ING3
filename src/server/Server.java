@@ -7,13 +7,14 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Server {
 
-    private static final int SERVER_PORT = 8888;
-    private static final String SERVER_IP = "192.168.1.49";
+    private static final int SERVER_PORT = 9999;
+    private static final String SERVER_IP = "192.168.1.11";
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -140,30 +141,51 @@ public class Server {
 
     public static void isValidUser(String username, String password) {
         //verification alix SQL
+        try {
+            Connection connexion = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/appconv", "root", "");
 
-        if (true) {//si cest bon
-            for (ClientHandler handler : clientHandlers) {
-                if (handler.getUsername().equalsIgnoreCase("unknown")) {
-                    handler.getWriter().println("The user has an account");
-                    handler.setUsername(username);
-                    break;
+            PreparedStatement stmt = connexion.prepareStatement("SELECT * FROM user WHERE username = ? AND pwd = ?");
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                for (ClientHandler handler : clientHandlers) {
+                    if (handler.getUsername().equalsIgnoreCase("unknown")) {
+                        handler.getWriter().println("The user has an account");
+                        handler.setUsername(username);
+                        break;
+                    }
+                }
+
+            } else {
+                for (ClientHandler handler : clientHandlers) {
+                    if (handler.getUsername().equalsIgnoreCase("unknown")) {
+                        handler.getWriter().println("The user has no account");
+                        break;
+                    }
                 }
             }
-        } else { //si c'est pas bon
-            for (ClientHandler handler : clientHandlers) {
-                if (handler.getUsername().equalsIgnoreCase("unknown")) {
-                    handler.getWriter().println("The user has no account");
-                    break;
-                }
-            }
+
+            connexion.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public static void inscription(String username, String password) {
         //Connexion alix SQL
+        try {
+            Connection connexion = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/appconv", "root", "");
 
-        System.out.println(username); //verif nom et mdp
-        System.out.println(password);
+            Statement stmt = connexion.createStatement();
+            String query = "INSERT INTO user(username, pwd) VALUES('" + username + "', '" + password + "')";
+            stmt.executeUpdate(query);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
