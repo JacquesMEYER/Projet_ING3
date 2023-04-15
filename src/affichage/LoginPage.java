@@ -10,10 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
-public class LoginPage extends JFrame implements ActionListener, Observer {
+public class LoginPage extends JFrame implements ActionListener{
 
     private LoginController loginController;
+
+
     // Variables pour les champs de texte et le bouton
     JTextField usernameField;
     JPasswordField passwordField;
@@ -59,31 +62,39 @@ public class LoginPage extends JFrame implements ActionListener, Observer {
 
     public void actionPerformed(ActionEvent e) {
 
-        // Vérifier si le bouton de connexion a été cliqué
+
         if (e.getSource() == loginButton) {
-            // Récupérer le nom d'utilisateur et le mot de passe entrés
+
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
 
-            // Vérifier si les informations de connexion sont correctes
-            if (username.equals(loginController.getModel().getUser().getUsername()) && password.equals(loginController.getModel().getUser().getPassword())) {
-                JOptionPane.showMessageDialog(this, "Connexion sucess !");
+            loginController.sendMessage("/testConnexion: " + username + " " + password);
 
-                MessageController messageController = new MessageController(loginController.getModel());
-                //ajouter mon nom dans le tab de nom du controller
-                pageAcceuil view2 = new pageAcceuil(messageController);
-                messageController.setView(view2);
-                dispose();
-                view2.setVisible(true);
 
+            //  boolean userIsValid = loginController.getUserIsValid();
+            Boolean userIsValid = loginController.getUserIsValidWithTimeout(1, TimeUnit.SECONDS);
+            if (userIsValid == null) {
+                System.out.println("marche pas");
+
+            } else {
+                if (username.isEmpty() || password.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Veuillez saisir un nom d'utilisateur et un mot de passe.");
+                } else if (userIsValid) {//
+                    loginController.setUsername(username);
+                    loginController.setUserPassword(password);
+                    JOptionPane.showMessageDialog(this, "Connexion sucess !");
+                    MessageController messageController = new MessageController(loginController.getModel());
+                    pageAcceuil view2 = new pageAcceuil(messageController);
+                    messageController.setView(view2);
+                    dispose();
+                    view2.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Incorrect user or password.");
+                }
             }
-            else {
-                JOptionPane.showMessageDialog(this, "Incorrect user or password.");
-            }
-
         }
         MessageController signup;
-        if (e.getSource() == registerButton){
+        if (e.getSource() == registerButton) {
 
             SignUpController SignUpController = new SignUpController(loginController.getModel());
             SignUP view3 = new SignUP(SignUpController);
@@ -94,10 +105,7 @@ public class LoginPage extends JFrame implements ActionListener, Observer {
 
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
 
-    }
 
    /* public static void main(String[] args) {
         Affichage.LoginPage loginPage = new Affichage.LoginPage();

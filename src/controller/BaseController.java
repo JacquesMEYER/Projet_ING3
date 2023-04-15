@@ -12,7 +12,7 @@ public abstract class BaseController implements Observer {
         this.model = model;
         model.addObserver(this);
     }
-    public Client getModel() {
+    public  Client getModel() {
         return model;
     }
     public void update(Observable o, Object arg) {}

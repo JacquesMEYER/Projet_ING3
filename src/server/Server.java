@@ -18,6 +18,7 @@ public class Server {
     static Set<String> bannedUser = new HashSet<>();
 
     static Set<ClientHandler> clientHandlers = new HashSet<>();
+    //static DriverManager DriverManager;
 
     public static void main(String[] args) {
         System.out.println("Démarrage du serveur...");
@@ -32,7 +33,7 @@ public class Server {
                 BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String username = input.readLine();
                 ClientHandler clientHandler = new ClientHandler(clientSocket, clientWriter, username);
-                broadcastMessage("* "+username + " has entered the chat *");
+                broadcastMessage("* " + username + " has entered the chat *");
                 //Server.afficherQuiEstCo();
 
                 clientHandlers.add(clientHandler);
@@ -102,29 +103,30 @@ public class Server {
     public static void afficherQuiEstCo() { //sans affichage , que pour les boutons
 
         String noms = "";
-        int i=0;
+        int i = 0;
         for (ClientHandler handler : clientHandlers) {
-            if(i==0){
+            if (i == 0) {
                 noms = noms + handler.getUsername();
-            }else noms=noms +" "+ handler.getUsername();
+            } else noms = noms + " " + handler.getUsername();
             i++;
-            }
-       // System.out.println(noms);
+        }
+        // System.out.println(noms);
         //System.out.println(userSender);
         for (ClientHandler handler : clientHandlers) {
-           // if (handler.getUsername().equalsIgnoreCase(userSender)) {
-                handler.getWriter().println("co:" + noms);
+            // if (handler.getUsername().equalsIgnoreCase(userSender)) {
+            handler.getWriter().println("co:" + noms);
             //}
         }
     }
+
     public static void afficherQuiEstCo2(String userSender) { //qui affiche dans la ocnv qui est co
 
         String noms = "";
-        int i=0;
+        int i = 0;
         for (ClientHandler handler : clientHandlers) { //pour eviter l espace au debut
-            if(i==0){
+            if (i == 0) {
                 noms = noms + handler.getUsername();
-            }else noms=noms +" "+ handler.getUsername();
+            } else noms = noms + " " + handler.getUsername();
             i++;
         }
         System.out.println(noms);
@@ -135,4 +137,34 @@ public class Server {
             }
         }
     }
+
+    public static void isValidUser(String username, String password) {
+        //verification alix SQL
+
+        if (false) {//si cest bon
+            for (ClientHandler handler : clientHandlers) {
+                if (handler.getUsername().equalsIgnoreCase("unknown")) {
+                    handler.getWriter().println("The user has an account");
+                    handler.setUsername(username);
+                    break;
+                }
+            }
+        } else { //si c'est pas bon
+            for (ClientHandler handler : clientHandlers) {
+                if (handler.getUsername().equalsIgnoreCase("unknown")) {
+                    handler.getWriter().println("The user has no account");
+                    break;
+                }
+            }
+        }
+    }
+
+    public static void inscription(String username, String password) {
+        //Connexion alix SQL
+
+        System.out.println(username); //verif nom et mdp
+        System.out.println(password);
+    }
+
+
 }

@@ -67,15 +67,18 @@ public class SignUP extends JFrame implements ActionListener, Observer {
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Veuillez saisir un nom d'utilisateur et un mot de passe.");
             } else {
+                signUpController.sendMessage("/testInscription: "+username+" "+password);
                 JOptionPane.showMessageDialog(this, "Inscription réussie !");
-                dispose();
+
             }
         }
         if (e.getSource() == loginButton){
 
+            LoginController loginController = new LoginController(signUpController.getModel());
+            LoginPage view = new LoginPage(loginController);
+            loginController.setView(view);
 
-            //LoginPage loginPage = new LoginPage(loginController);
-            //loginPage.setVisible(true);
+            view.setVisible(true);
             dispose();
         }
 

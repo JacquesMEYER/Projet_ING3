@@ -1,5 +1,6 @@
 package controller;
 
+import affichage.LoginPage;
 import affichage.pageAcceuil;
 import model.Client;
 
@@ -47,7 +48,8 @@ public class MessageController extends BaseController {
             vrmtCo = new HashSet<>(Arrays.asList(noms));
             view.setNomsCo(nomsCo);
             view.updateUserButtons(nomsCo, view.getUserButtonsPanel(), vrmtCo); // Appelez la méthode updateUserButtons ici
+        } else if (message.equals("The user has an account")) {
+        } else if (message.equals("The user has no account")) {
         } else view.addMessage(message);
     }
-
 }

@@ -1,8 +1,6 @@
 package model;
 
 public class Utilisateur {
-    private String name;
-    private String prenom;
     private String username;
     private String password;
     public enum Status {ONLINE,OFFLINE,AWAY,DEMARRED}
@@ -37,5 +35,13 @@ public class Utilisateur {
 
     public Utilisateur.userType getUserType() {
         return userType;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

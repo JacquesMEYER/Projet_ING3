@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Connection;
+import java.util.Arrays;
 
 class ClientHandler implements Runnable {
     private Socket clientSocket;
@@ -26,6 +28,10 @@ class ClientHandler implements Runnable {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Override
     public void run() {
         try {
@@ -35,12 +41,13 @@ class ClientHandler implements Runnable {
             clientSocket.getInetAddress();
             Server.afficherQuiEstCo();
 
-
             while ((message = input.readLine()) != null) {
+                System.out.println("Message reçu : " + message); // Ajoutez cette ligne
 
                 String[] parts1 = message.split("¤");
                 String userSender = parts1[0];
                 String onlyTheMessage = parts1[1];
+
                 if (Server.IsBanned(userSender)) {
                     Server.sendMessageTBanned(userSender);
                 } else {
@@ -63,7 +70,20 @@ class ClientHandler implements Runnable {
                         Server.afficherQuiEstCo();
                     } else if (onlyTheMessage.startsWith("/co")) {
                         Server.afficherQuiEstCo2(userSender);
-                    } else {
+                    } else if (onlyTheMessage.startsWith("/testConnexion:")) {
+                        System.out.println("Test connexion détecté"); // Ajoutez cette ligne
+
+                        String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
+                        String nom = parts[1];
+                        String mdp = parts[2];
+                        Server.isValidUser(nom,mdp);
+                    }
+                    else if (onlyTheMessage.startsWith("/testInscription:")) {
+                        String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
+                        String nom = parts[1];
+                        String mdp = parts[2];
+                        Server.inscription(nom,mdp);
+                    }else {
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }
                    Server.afficherQuiEstCo();
@@ -84,6 +104,5 @@ class ClientHandler implements Runnable {
             }
         }
     }
-
 
 }

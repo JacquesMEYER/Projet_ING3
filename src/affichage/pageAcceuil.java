@@ -6,10 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 import javax.swing.Timer;
 
 public class pageAcceuil extends JFrame implements ActionListener {
@@ -20,16 +17,17 @@ public class pageAcceuil extends JFrame implements ActionListener {
     JButton sendButton;
     Vector<JButton> userButtons;
     //static Set<String> nomsCo = new HashSet<>(Arrays.asList("jac","rom","alix","ethan"));
-    private static Set<String> nomsCo = new HashSet<>(Arrays.asList("jac"));
+    private static Set<String> nomsCo = new HashSet<>(Arrays.asList("-"));
 
     public void updateUserButtons(Set<String> nomsCo, JPanel userButtonsPanel, Set<String> vrmtCo) {
 
         userButtonsPanel.removeAll();
         String nomV2 = "";
         for (String nom : nomsCo) {
-            if (nom == messageController.getModel().getUser().getUsername()) {
-                nomV2 = nom + " (me)";
-            } else nomV2 = nom;
+            if (!Objects.equals(nom, "unknown")){
+                if (nom == messageController.getModel().getUser().getUsername()) {
+                    nomV2 = nom + " (me)";
+                } else nomV2 = nom;
             JButton userButton = new JButton(nomV2);
             if (vrmtCo.contains(nom)) {
                 userButton.setBackground(Color.GREEN);
@@ -44,6 +42,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
                     parametter.setVisible(true);
                 }
             });
+        }
         }
 
         userButtonsPanel.revalidate();

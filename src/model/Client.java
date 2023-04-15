@@ -1,5 +1,7 @@
 
 package model;
+import controller.LoginController;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,9 +9,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Observable;
+import java.util.Observer;
 
 public class Client extends Observable {
-    private Utilisateur user = new Utilisateur("jac", "mdp");
+    private Utilisateur user = new Utilisateur("unknown", "unknown");
     private static final String SERVER_IP = "192.168.1.49";
     private static final int SERVER_PORT = 8888;
 
@@ -58,5 +61,8 @@ public class Client extends Observable {
 
     public Utilisateur getUser() {
         return this.user;
+    }
+    public void addObserver(Observer observer) {
+        super.addObserver(observer);
     }
 }
