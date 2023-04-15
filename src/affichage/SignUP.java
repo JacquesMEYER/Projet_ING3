@@ -39,9 +39,9 @@ public class SignUP extends JFrame implements ActionListener, Observer {
         registerPanel.add(usernameField);
         registerPanel.add(new JLabel("Choose password :"));
         registerPanel.add(passwordField);
-
-        registerPanel.add(registerButton);
         registerPanel.add(loginButton);
+        registerPanel.add(registerButton);
+
 
         // Définir la couleur d'arrière-plan de la fenêtre et du JPanel
         registerPanel.setBackground(Color.white);

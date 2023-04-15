@@ -141,7 +141,7 @@ public class Server {
     public static void isValidUser(String username, String password) {
         //verification alix SQL
 
-        if (false) {//si cest bon
+        if (true) {//si cest bon
             for (ClientHandler handler : clientHandlers) {
                 if (handler.getUsername().equalsIgnoreCase("unknown")) {
                     handler.getWriter().println("The user has an account");
