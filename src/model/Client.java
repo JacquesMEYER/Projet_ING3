@@ -46,7 +46,7 @@ public class Client extends Observable {
         } catch (UnknownHostException e) {
             System.err.println("Hôte inconnu : " + e.getMessage());
         } catch (IOException e) {
-            System.err.println("Erreur d'entrée/sortie : " + e.getMessage());
+             System.err.println("Erreur d'entrée/sortie : " + e.getMessage());
         }
     }
 
