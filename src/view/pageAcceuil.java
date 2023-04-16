@@ -1,4 +1,4 @@
-package affichage;
+package view;
 
 import controller.MessageController;
 

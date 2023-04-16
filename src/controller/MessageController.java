@@ -1,7 +1,6 @@
 package controller;
 
-import affichage.LoginPage;
-import affichage.pageAcceuil;
+import view.pageAcceuil;
 import model.Client;
 
 import java.util.Arrays;

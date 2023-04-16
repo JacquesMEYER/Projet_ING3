@@ -1,7 +1,6 @@
-package affichage;
+package view;
 
 import controller.MessageController;
-import model.Client;
 
 import javax.swing.*;
 import java.awt.*;

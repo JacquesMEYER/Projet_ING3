@@ -1,5 +1,8 @@
 package server;
 
+import DAO.ConnectionDB;
+import DAO.UserDAO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +26,7 @@ public class Server {
 
     public static void main(String[] args) {
         System.out.println("Démarrage du serveur...");
+
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT, 50, InetAddress.getByName(SERVER_IP))) {
             while (true) {
                 bannedUser.add("test");
@@ -140,17 +144,14 @@ public class Server {
     }
 
     public static void isValidUser(String username, String password) {
-        //verification alix SQL
+        boolean isValid = false;
+
         try {
-            Connection connexion = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/appconv", "root", "");
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDao = new UserDAO(conn);
+            isValid = userDao.isValidUser(username, password);
 
-            PreparedStatement stmt = connexion.prepareStatement("SELECT * FROM user WHERE username = ? AND pwd = ?");
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if(rs.next()) {
+            if(isValid) {
                 for (ClientHandler handler : clientHandlers) {
                     if (handler.getUsername().equalsIgnoreCase("unknown")) {
                         handler.getWriter().println("The user has an account");
@@ -167,21 +168,18 @@ public class Server {
                     }
                 }
             }
-
-            connexion.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void inscription(String username, String password) {
-        //Connexion alix SQL
+        // utilisation du UserDAO
         try {
-            Connection connexion = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/appconv", "root", "");
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDao = new UserDAO(conn);
 
-            Statement stmt = connexion.createStatement();
-            String query = "INSERT INTO user(username, pwd) VALUES('" + username + "', '" + password + "')";
-            stmt.executeUpdate(query);
+            userDao.addUser(username, password);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

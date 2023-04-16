@@ -1,6 +1,6 @@
 package controller;
 
-import affichage.SignUP;
+import view.SignUP;
 import model.Client;
 
 import java.util.Observable;

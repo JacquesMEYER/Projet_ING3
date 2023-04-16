@@ -1,6 +1,6 @@
 
 
-import affichage.LoginPage;
+import view.LoginPage;
 import controller.LoginController;
 import model.Client;
 

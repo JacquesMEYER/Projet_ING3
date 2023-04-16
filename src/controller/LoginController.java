@@ -1,6 +1,6 @@
 package controller;
 
-import affichage.LoginPage;
+import view.LoginPage;
 import model.Client;
 
 import java.util.Observable;
@@ -8,10 +8,6 @@ import java.util.Observer;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.CountDownLatch;
 
 
 public class LoginController extends BaseController implements Observer {

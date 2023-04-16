@@ -1,7 +1,6 @@
-package affichage;
+package view;
 
 import controller.LoginController;
-import controller.MessageController;
 import controller.SignUpController;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package affichage;
+package view;
 
 import controller.LoginController;
 import controller.MessageController;
@@ -8,8 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
 public class LoginPage extends JFrame implements ActionListener{
@@ -72,7 +70,7 @@ public class LoginPage extends JFrame implements ActionListener{
 
 
             //  boolean userIsValid = loginController.getUserIsValid();
-            Boolean userIsValid = loginController.getUserIsValidWithTimeout(1, TimeUnit.SECONDS);
+            Boolean userIsValid = loginController.getUserIsValidWithTimeout(2, TimeUnit.SECONDS);
             if (userIsValid == null) {
                 System.out.println("marche pas");
 
