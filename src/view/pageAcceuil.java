@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.*;
 import javax.swing.Timer;
 
@@ -103,6 +105,28 @@ public class pageAcceuil extends JFrame implements ActionListener {
         messageField = new JTextField();
         bottomPanel.add(messageField, BorderLayout.CENTER);
         sendButton = new JButton("Envoyer");
+
+        messageField.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // Vérifiez si la touche pressée est "Entrée"
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    // Déclenchez l'événement de clic sur le bouton
+                    sendButton.doClick();
+                }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                // méthode obligatoire pour utiliser KeyListener MAIS pas utiliser pour nous
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // méthode obligatoire pour utiliser KeyListener MAIS pas utiliser pour nous
+            }
+        });
 
         sendButton.addActionListener(new ActionListener() {
             @Override
