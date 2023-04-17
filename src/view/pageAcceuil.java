@@ -106,6 +106,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         bottomPanel.add(messageField, BorderLayout.CENTER);
         sendButton = new JButton("Envoyer");
 
+        // quand la touche entrée est pressée dans le champ de text, le bouton send est déclenché
         messageField.addKeyListener(new KeyListener() {
 
             @Override

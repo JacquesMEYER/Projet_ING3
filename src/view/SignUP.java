@@ -69,6 +69,9 @@ public class SignUP extends JFrame implements ActionListener, Observer {
                 signUpController.sendMessage("/testInscription: "+username+" "+password);
                 JOptionPane.showMessageDialog(this, "Inscription réussie !");
 
+                LoginController loginController = new LoginController(signUpController.getModel());
+                LoginPage view = new LoginPage(loginController);
+                loginController.setView(view);
             }
         }
         if (e.getSource() == loginButton){

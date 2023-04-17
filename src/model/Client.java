@@ -13,7 +13,7 @@ import java.util.Observer;
 
 public class Client extends Observable {
     private Utilisateur user = new Utilisateur("unknown", "unknown");
-    private static final String SERVER_IP = "172.20.10.2";
+    private static final String SERVER_IP = "10.63.21.153";
     private static final int SERVER_PORT = 9999;
 
     private PrintWriter out;

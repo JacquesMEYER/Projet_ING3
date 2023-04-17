@@ -2,16 +2,20 @@ package DAO;
 
 import model.Utilisateur;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.AlgorithmParameters;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.List;
 
 public class UserDAO implements DAO<Utilisateur> {
     private Connection conn;
-
-    /* quand il y en aura besoin :
-        Connection conn = ConnectionDB.getConnection();
-        UserDAO userDao = new UserDAO(conn);
-     */
 
     public UserDAO(Connection connection){
         this.conn = connection;
@@ -27,7 +31,18 @@ public class UserDAO implements DAO<Utilisateur> {
         return null;
     }
 
-    public void addUser(String username, String pwd) {
+    /*public static String hash(String pwd) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-1");
+        byte[] hashBytes = digest.digest(pwd.getBytes(StandardCharsets.UTF_8));
+        StringBuilder hexString = new StringBuilder();
+
+        for (byte b : hashBytes) {
+            hexString.append(String.format("%02x", b));
+        }
+        return hexString.toString();
+    }*/
+
+    public void addUser(String username, String pwd) throws NoSuchAlgorithmException {
         //méthode pour ajouter un utilisateur dans la base de données
         try {
             Statement stmt = this.conn.createStatement();
@@ -42,16 +57,26 @@ public class UserDAO implements DAO<Utilisateur> {
         //code pour mettre à jour un utilisateur
     }
 
-    public boolean isValidUser(String username, String password) {
-        try {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user WHERE username = ? AND pwd = ?");
-            stmt.setString(1, username);
-            stmt.setString(2, password);
+    public boolean isValidUser(String username, String password) throws NoSuchAlgorithmException {
+        // cryptage du mot de passe écrit par l'utilisateur
+        //String hashedPwd = hash(password);
+        //System.out.println(hashedPwd);
 
-            ResultSet rs = stmt.executeQuery();
+        // recherche dans la BDD s'il existe un utilisateur avec le nom et mot de passe entrés
+        try {
+            PreparedStatement statement = conn.prepareStatement("SELECT pwd FROM user WHERE username = ?");
+            statement.setString(1, username);
+            ResultSet rs = statement.executeQuery();
 
             if(rs.next()) {
                 return true;
+                /*String correctHashedPwd = rs.getString("pwd");
+                System.out.println(correctHashedPwd);
+                if(correctHashedPwd.equals(hashedPwd)) {
+                    return true;
+                } else {
+                    return false;
+                }*/
             } else {
                 return false;
             }

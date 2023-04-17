@@ -54,13 +54,6 @@ public class LoginController extends BaseController implements Observer {
     public Boolean getUserIsValid() {
         return userIsValid;
     }
-
-    /*
-        public  void setUserIsValid(Boolean bool) {
-            this.userIsValid = bool;
-        }
-
-     */
     public void setUserIsValid(Boolean bool) {
         userValidityQueue.offer(bool);
     }
