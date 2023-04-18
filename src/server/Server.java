@@ -19,7 +19,8 @@ import java.util.Set;
 public class Server {
 
     private static final int SERVER_PORT = 9999;
-    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = "172.20.10.3";
+    //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -40,7 +41,7 @@ public class Server {
                 BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String username = input.readLine();
                 ClientHandler clientHandler = new ClientHandler(clientSocket, clientWriter, username);
-                broadcastMessage("* " + username + " has entered the chat *");
+                //broadcastMessage("* " + username + " has entered the chat *");
                 //Server.afficherQuiEstCo();
 
                 clientHandlers.add(clientHandler);
@@ -158,6 +159,8 @@ public class Server {
                     if (handler.getUsername().equalsIgnoreCase("unknown")) {
                         handler.getWriter().println("The user has an account");
                         handler.setUsername(username);
+                        broadcastMessage("* " + username + " has entered the chat *");
+
                         break;
                     }
                 }
