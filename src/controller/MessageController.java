@@ -1,12 +1,14 @@
 package controller;
 
-import view.pageAcceuil;
 import model.Client;
+import view.pageAcceuil;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Observable;
-import java.util.Set;
+import java.util.*;
+
+import static model.Utilisateur.UserType.CLASSIC;
+import static model.Utilisateur.UserType.ADMINISTRATOR;
+import static model.Utilisateur.UserType.MODERATOR;
+
 
 public class MessageController extends BaseController {
 
@@ -27,9 +29,25 @@ public class MessageController extends BaseController {
     public void sendMessage(String message) {
         model.sendMessage(message);
     }
+    public void changeType(String type) {
+        if(Objects.equals(type, "classic")){
+            model.getUser().setUserType(CLASSIC);
+        }
+        if(Objects.equals(type, "admin")){
+            model.getUser().setUserType(ADMINISTRATOR);
+        }
+        if(Objects.equals(type, "moderator")){
+            model.getUser().setUserType(MODERATOR);
+        }
+        view.repaint();
+        view.updateUserTypeLabel(); // Ajoutez cette ligne pour mettre à jour le label
+        System.out.println(model.getUser().getUserType());
+
+    }
 
 
-    public Set<String> getNomsCo() {
+
+        public Set<String> getNomsCo() {
         return nomsCo;
     }
 
@@ -40,6 +58,7 @@ public class MessageController extends BaseController {
     @Override
     public void update(Observable o, Object arg) {
         String message = (String) arg;
+        System.out.println(message);
 
         if (message.startsWith("co:")) {
             String[] noms = message.substring("co:".length()).split(" ");
@@ -49,6 +68,24 @@ public class MessageController extends BaseController {
             view.updateUserButtons(nomsCo, view.getUserButtonsPanel(), vrmtCo); // Appelez la méthode updateUserButtons ici
         } else if (message.equals("The user has an account")) {
         } else if (message.equals("The user has no account")) {
-        } else view.addMessage(message);
+        } else if (message.startsWith("/changeType:")) {
+            String[] parts = message.split(" ", 2);
+            String type = parts[0].substring("/changeType:".length());
+
+
+
+            //System.out.println(type);
+
+            changeType(type);
+        }
+        else {
+            if (message.startsWith(model.getUser().getUsername())) {
+                view.sendMessageRight(message);
+            } else if (message.startsWith("*")) {
+                view.sendMessageCenter(message);
+            } else {
+                view.sendMessageLeft(message);
+            }
+        }
     }
 }

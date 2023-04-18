@@ -14,7 +14,10 @@ public class LoginPage extends JFrame implements ActionListener{
 
     private LoginController loginController;
 
-
+    Color bleuclair = new Color(234, 242, 248);
+    Color bleufonce1 = new Color(36, 113, 163);
+    Color bleufonce2 = new Color(31, 97, 141);
+    Color bleufonce3 = new Color(23, 32, 42);
     // Variables pour les champs de texte et le bouton
     JTextField usernameField;
     JPasswordField passwordField;
@@ -25,31 +28,40 @@ public class LoginPage extends JFrame implements ActionListener{
         // Créer une nouvelle fenêtre JFrame avec un titre
         super("LOGIN");
         this.loginController = loginController;
+
         // Initialiser les champs de texte et le bouton
         usernameField = new JTextField(20);
         passwordField = new JPasswordField(20);
         loginButton = new JButton("Login");
-        registerButton = new JButton("Sign UP");
-        registerButton.setBackground(Color.black);
-        loginButton.setBackground(Color.black);
+        loginButton.setBackground(bleufonce2);
+        loginButton.setForeground(bleuclair);
 
-        // Ajouter des écouteurs d'événements pour le bouton de connexion
-        loginButton.addActionListener(this);
+        registerButton = new JButton("SingUP");
+        registerButton.setBackground(bleufonce2);
+        registerButton.setForeground(bleuclair);
+        // Ajouter des écouteurs d'événements pour le bouton d'inscription
         registerButton.addActionListener(this);
+        loginButton.addActionListener(this);
         // Créer un nouveau JPanel pour contenir les champs de texte et le bouton
-        JPanel loginPanel = new JPanel(new GridLayout(3, 1));
-        loginPanel.add(new JLabel("User name :"));
-        loginPanel.add(usernameField);
-        loginPanel.add(new JLabel("Password :"));
-        loginPanel.add(passwordField);
-        loginPanel.add(registerButton);
-        loginPanel.add(loginButton);
+        JPanel registerPanel = new JPanel(new GridLayout(3, 1));
 
+        JLabel cusername = new JLabel("Username :");
+        cusername.setForeground(bleufonce3);
+        registerPanel.add(cusername);
+        registerPanel.add(usernameField);
+
+        JLabel cpsw = new JLabel("Password :");
+        cpsw.setForeground(bleufonce3);
+        registerPanel.add(cpsw);
+        registerPanel.add(passwordField);
+
+        registerPanel.add(registerButton);
+        registerPanel.add(loginButton);
 
         // Définir la couleur d'arrière-plan de la fenêtre et du JPanel
-        loginPanel.setBackground(Color.white);
-        getContentPane().add(loginPanel, BorderLayout.CENTER);
-        getContentPane().setBackground(Color.blue);
+        registerPanel.setBackground(bleuclair);
+        getContentPane().add(registerPanel, BorderLayout.CENTER);
+        getContentPane().setBackground(Color.red);
 
         // Définir les propriétés de la fenêtre JFrame
         pack();
@@ -103,9 +115,4 @@ public class LoginPage extends JFrame implements ActionListener{
 
     }
 
-
-
-   /* public static void main(String[] args) {
-        Affichage.LoginPage loginPage = new Affichage.LoginPage();
-    }*/
 }

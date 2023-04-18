@@ -19,8 +19,7 @@ import java.util.Set;
 public class Server {
 
     private static final int SERVER_PORT = 9999;
-    private static final String SERVER_IP = "172.20.10.3";
-    //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP =IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -59,14 +58,14 @@ public class Server {
 
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(username)) {
-                handler.getWriter().println("(private message from " + userSender + ") " + message);
+                handler.getWriter().println(userSender+" (private message from " + userSender + ") " + message);
 
                 break;
             }
         }
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(userSender)) {
-                handler.getWriter().println("(private message to " + username + ") " + message);
+                handler.getWriter().println(userSender+" (private message to " + username + ") " + message);
                 break;
             }
         }
@@ -75,7 +74,7 @@ public class Server {
     public static void broadcastMessage(String message) {
         for (ClientHandler handler : clientHandlers) {
             if (bannedUser.contains(handler.getUsername())) {
-                handler.getWriter().println("pas de message pour toi, t'es banni!!!!!");
+                handler.getWriter().println("* pas de message pour toi, t'es banni!!!!! *");
             } else {
                 handler.getWriter().println(message);
             }
@@ -103,7 +102,7 @@ public class Server {
     public static void sendMessageTBanned(String username) {
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(username)) {
-                handler.getWriter().println("pas de message pour toi, t'es banni");
+                handler.getWriter().println("* pas de message pour toi, t'es banni *");
             }
         }
     }
@@ -194,4 +193,18 @@ public class Server {
             throw new RuntimeException(e);
         }
     }
+    public static void changeType(String targetUsername, String type, String userSender) {
+
+        for (ClientHandler handler : clientHandlers) {
+            if (handler.getUsername().equalsIgnoreCase(targetUsername)) {
+                broadcastMessage("* "+ userSender+" set "+targetUsername+" to "+type+" *" );
+                handler.getWriter().println("/changeType:" + type);
+                break;
+            }
+        }
+
+
+    }
+
+
 }

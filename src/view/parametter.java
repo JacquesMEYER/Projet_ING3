@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static model.Utilisateur.UserType.ADMINISTRATOR;
+import static model.Utilisateur.UserType.MODERATOR;
+
 public class parametter extends JFrame implements ActionListener {
     JButton ban, unban, user_type, setClassicButton, setAdminButton, setModeratorButton;
     int userType = 1;
@@ -71,9 +74,15 @@ public class parametter extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        userType = 1;
+        //userType=1;
+       if(messageController.getModel().getUser().getUserType()==ADMINISTRATOR){
+           userType =1;
+       }else if(messageController.getModel().getUser().getUserType()==MODERATOR){
+           userType=2;
+       }else userType=3;
+
         if (e.getSource() == ban) {
-            if (userType != 1) {
+            if (userType == 3) {
                 JOptionPane.showMessageDialog(this, "YOU CANNOT!");
                 dispose();
             } else {
@@ -82,7 +91,7 @@ public class parametter extends JFrame implements ActionListener {
             }
         }
         if (e.getSource() == unban) {
-            if (userType != 1) {
+            if (userType == 3) {
                 JOptionPane.showMessageDialog(this, "YOU CANNOT!");
                 dispose();
             } else {
@@ -92,25 +101,25 @@ public class parametter extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == user_type) {
-            if (userType != 1) {
-                JOptionPane.showMessageDialog(this, "YOU CANNOT!");
-            } else {
+            if (userType == 1) {
                 CardLayout cl = (CardLayout) cards.getLayout();
                 cl.next(cards); // Basculer entre les cartes (boutons de type dutilisateur et vide) lorsque le bouton user_type est cliqué.
+            } else {
+                JOptionPane.showMessageDialog(this, "YOU CANNOT!");
             }
         }
         if (e.getSource() == setClassicButton) {
-            messageController.sendMessage("/setUserType:" + nom + ":classic");
+            messageController.sendMessage("/setUserType: " + messageController.getModel().getUser().getUsername() + " classic");
             dispose();
         }
 
         if (e.getSource() == setAdminButton) {
-            messageController.sendMessage("/setUserType:" + nom + ":admin");
+            messageController.sendMessage("/setUserType: " + messageController.getModel().getUser().getUsername() + " admin");
             dispose();
         }
 
         if (e.getSource() == setModeratorButton) {
-            messageController.sendMessage("/setUserType:" + nom + ":moderator");
+            messageController.sendMessage("/setUserType: " + messageController.getModel().getUser().getUsername() + " moderator");
             dispose();
         }
 

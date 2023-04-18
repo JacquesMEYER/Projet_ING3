@@ -8,18 +8,29 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.swing.Timer;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 
 public class pageAcceuil extends JFrame implements ActionListener {
-    private static MessageController messageController;
-    JTextArea chatArea;
+    private  MessageController messageController;
+    JEditorPane chatArea;
     JPanel userButtonsPanel;
     JTextField messageField;
     JButton sendButton;
     JLabel userTypeLabel;
     Vector<JButton> userButtons;
     //static Set<String> nomsCo = new HashSet<>(Arrays.asList("jac","rom","alix","ethan"));
+
+    Color bleuclair = new Color(214, 234, 248);
+    HTMLEditorKit editorKit;
+    HTMLDocument doc;
+
     private static Set<String> nomsCo = new HashSet<>(Arrays.asList("-"));
 
     public void updateUserButtons(Set<String> nomsCo, JPanel userButtonsPanel, Set<String> vrmtCo) {
@@ -94,8 +105,15 @@ public class pageAcceuil extends JFrame implements ActionListener {
         // Création du panneau central pour le salon de discussion et les messages
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BorderLayout());
-        chatArea = new JTextArea();
+        chatArea = new JEditorPane();
+
         chatArea.setEditable(false);
+        chatArea.setContentType("text/html");
+        editorKit = new HTMLEditorKit();
+        doc = new HTMLDocument();
+        chatArea.setEditorKit(editorKit);
+        chatArea.setDocument(doc);
+        chatArea.setBackground(bleuclair);
         JScrollPane chatScrollPane = new JScrollPane(chatArea);
         centerPanel.add(chatScrollPane, BorderLayout.CENTER);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
@@ -111,6 +129,8 @@ public class pageAcceuil extends JFrame implements ActionListener {
         JPanel userTypePanel = new JPanel();
         userTypePanel.setLayout(new BorderLayout());
         userTypeLabel = new JLabel("(" + messageController.getModel().getUser().getUserType()+")");
+       // userTypeLabel = new JLabel("zizi");
+
         userTypePanel.add(userTypeLabel, BorderLayout.NORTH);
 
         // Ajout du JPanel userTypePanel au panneau principal
@@ -170,7 +190,9 @@ public class pageAcceuil extends JFrame implements ActionListener {
     }
 
     public void addMessage(String message) {
-        chatArea.append(message + "\n");
+        //chatArea.append(message + "\n");
+
+        sendMessageLeft(message+ "\n");
     }
 
     public void setNomsCo(Set<String> nomsCo) {
@@ -197,7 +219,44 @@ public class pageAcceuil extends JFrame implements ActionListener {
         });
         timer.start();
     }
+    public void updateUserTypeLabel() {
+        userTypeLabel.setText("(" + messageController.getModel().getUser().getUserType() + ")");
+    }
 
+
+    public String getCurrentTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return LocalTime.now().format(formatter);
+    }
+
+    public void sendMessageRight(String mess) {
+        String currentTime = getCurrentTime();
+        String rightStyle = "<div style='text-align: right; background-color: #85C1E9; color:white; max-width: 50px; padding: 5px 10px; border:2px black solid; margin-left:250px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white;display: inline-flex; '>%s</span></div><br>";
+        appendMessage(mess, currentTime, rightStyle);
+    }
+    //    background-size: 10px; display: inline-block;
+    public void sendMessageLeft(String mess) {
+        String currentTime = getCurrentTime();
+        String leftStyle = "<div style=' text-align: left; background-color: #3498DB; color:white; max-width: 50px; padding: 5px 10px; border:2px black solid; margin-right:250px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white; display: inline-flex;'>%s</span></div>";
+
+        appendMessage(mess, currentTime, leftStyle);
+    }
+
+    public void sendMessageCenter(String mess) {
+        String currentTime = getCurrentTime();
+        String centerStyle = "<div style='text-align: center; font-style: italic; display: inline-block;  max-width: 100%%; padding: 3px 10px;  margin-bottom: 5px;'>%s<span style='font-size: 0.8em; color: white; padding-left: 5px;'>%s</span></div><br>";
+        appendMessage(mess, currentTime, centerStyle);
+    }
+
+    private void appendMessage(String mess, String currentTime, String style) {
+        try {
+            String formattedMessage = String.format(style, mess, currentTime);
+            editorKit.insertHTML(doc, doc.getLength(), formattedMessage, 0, 0, null);
+            chatArea.setCaretPosition(chatArea.getDocument().getLength());
+        } catch (BadLocationException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

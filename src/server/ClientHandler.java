@@ -72,7 +72,6 @@ class ClientHandler implements Runnable {
                         Server.afficherQuiEstCo2(userSender);
                     } else if (onlyTheMessage.startsWith("/testConnexion:")) {
                         System.out.println("Test connexion détecté"); // Ajoutez cette ligne
-
                         String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
                         String nom = parts[1];
                         String mdp = parts[2];
@@ -83,7 +82,14 @@ class ClientHandler implements Runnable {
                         String nom = parts[1];
                         String mdp = parts[2];
                         Server.inscription(nom,mdp);
-                    }else {
+                    }else if (onlyTheMessage.startsWith("/setUserType:")) {
+                        String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
+                        String targetUsername = parts[1];
+                        String type = parts[2];
+                        Server.changeType(targetUsername, type, userSender);
+                    }
+
+                    else {
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }
                    Server.afficherQuiEstCo();

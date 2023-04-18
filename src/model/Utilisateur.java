@@ -16,7 +16,10 @@ public class Utilisateur {
     }
     Utilisateur(String pseudo){
         this.username=pseudo;
+    }
 
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public String getPassword() {
