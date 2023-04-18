@@ -2,6 +2,7 @@ package server;
 
 import DAO.ConnectionDB;
 import DAO.UserDAO;
+import model.IPAddress;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.Set;
 public class Server {
 
     private static final int SERVER_PORT = 9999;
-    private static final String SERVER_IP = "10.188.41.187";
+    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
