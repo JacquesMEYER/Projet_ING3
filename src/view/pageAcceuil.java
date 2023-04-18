@@ -17,6 +17,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
     JPanel userButtonsPanel;
     JTextField messageField;
     JButton sendButton;
+    JLabel userTypeLabel;
     Vector<JButton> userButtons;
     //static Set<String> nomsCo = new HashSet<>(Arrays.asList("jac","rom","alix","ethan"));
     private static Set<String> nomsCo = new HashSet<>(Arrays.asList("-"));
@@ -105,6 +106,15 @@ public class pageAcceuil extends JFrame implements ActionListener {
         messageField = new JTextField();
         bottomPanel.add(messageField, BorderLayout.CENTER);
         sendButton = new JButton("Envoyer");
+
+        // Création d'un JPanel pour afficher le type d'utilisateur
+        JPanel userTypePanel = new JPanel();
+        userTypePanel.setLayout(new BorderLayout());
+        userTypeLabel = new JLabel("(" + messageController.getModel().getUser().getUserType()+")");
+        userTypePanel.add(userTypeLabel, BorderLayout.NORTH);
+
+        // Ajout du JPanel userTypePanel au panneau principal
+        mainPanel.add(userTypePanel, BorderLayout.NORTH);
 
         // quand la touche entrée est pressée dans le champ de text, le bouton send est déclenché
         messageField.addKeyListener(new KeyListener() {

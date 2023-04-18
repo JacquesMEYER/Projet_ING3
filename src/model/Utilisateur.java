@@ -4,13 +4,15 @@ public class Utilisateur {
     private String username;
     private String password;
     public enum Status {ONLINE,OFFLINE,AWAY,DEMARRED}
-    public enum userType {CLASSIC,MODERATOR,ADMINISTRATOR}
+    public enum UserType {CLASSIC,MODERATOR,ADMINISTRATOR}
     private Status status;
-    private userType userType;
+    private UserType userType;
 
     Utilisateur(String pseudo,String mdp){
         this.username=pseudo;
         this.password=mdp;
+        this.userType= Utilisateur.UserType.ADMINISTRATOR;
+
     }
     Utilisateur(String pseudo){
         this.username=pseudo;
@@ -33,7 +35,7 @@ public class Utilisateur {
         return status;
     }
 
-    public Utilisateur.userType getUserType() {
+    public Utilisateur.UserType getUserType() {
         return userType;
     }
 

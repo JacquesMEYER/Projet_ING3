@@ -6,22 +6,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
 
-
-public class parametter extends JFrame implements ActionListener, Observer {
-    JButton ban,unban, stat, user_type;
+public class parametter extends JFrame implements ActionListener {
+    JButton ban, unban, user_type, setClassicButton, setAdminButton, setModeratorButton;
     int userType = 1;
+    JPanel userTypeButtonsPanel, cards;
     private MessageController messageController;
 
     private String nom;
 
-    public parametter(String nom,MessageController messageController){
+    public parametter(String nom, MessageController messageController) {
         super("Parametter");
         this.messageController = messageController;
-        this.nom=nom;
-        JPanel parpan = new JPanel(new GridLayout(4, 1));
+        this.nom = nom;
+        JPanel parpan = new JPanel(new GridLayout(0, 1)); // Changez le layout en GridLayout avec un nombre variable de lignes
         ban = new JButton("Ban");
         ban.addActionListener(this);
         ban.setBackground(Color.PINK);
@@ -34,14 +32,31 @@ public class parametter extends JFrame implements ActionListener, Observer {
         user_type.addActionListener(this);
         user_type.setBackground(Color.PINK);
 
-        stat = new JButton("stat");
-        stat.addActionListener(this);
-        stat.setBackground(Color.PINK);
-
         parpan.add(ban);
         parpan.add(unban);
-        parpan.add(stat);
         parpan.add(user_type);
+
+        // Créez un nouveau JPanel pour les boutons de type d'utilisateur
+        userTypeButtonsPanel = new JPanel(new GridLayout(3, 1));
+
+        setClassicButton = new JButton("Set Classic");
+        setClassicButton.addActionListener(this);
+        userTypeButtonsPanel.add(setClassicButton);
+
+        setAdminButton = new JButton("Set Admin");
+        setAdminButton.addActionListener(this);
+        userTypeButtonsPanel.add(setAdminButton);
+
+        setModeratorButton = new JButton("Set Moderator");
+        setModeratorButton.addActionListener(this);
+        userTypeButtonsPanel.add(setModeratorButton);
+
+        // Créez un JPanel avec un CardLayout pour gérer l'affichage des boutons de type d'utilisateur
+        cards = new JPanel(new CardLayout());
+        cards.add(new JPanel(), "empty");
+        cards.add(userTypeButtonsPanel, "userTypeButtons");
+
+        parpan.add(cards); // Ajoutez le JPanel cards à parpan
 
         // Définir la couleur d'arrière-plan de la fenêtre et du JPanel
         parpan.setBackground(Color.white);
@@ -52,52 +67,52 @@ public class parametter extends JFrame implements ActionListener, Observer {
         pack();
         setVisible(true);
         setLocationRelativeTo(null);
-/*
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-*/
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         userType = 1;
-        if (e.getSource() == ban){
-            if (userType != 1){
+        if (e.getSource() == ban) {
+            if (userType != 1) {
                 JOptionPane.showMessageDialog(this, "YOU CANNOT!");
                 dispose();
-            }
-            else{
-                messageController.sendMessage("/ban:"+nom);
+            } else {
+                messageController.sendMessage("/ban:" + nom);
                 dispose();
             }
         }
-        if (e.getSource() == unban){
-            if (userType != 1){
+        if (e.getSource() == unban) {
+            if (userType != 1) {
                 JOptionPane.showMessageDialog(this, "YOU CANNOT!");
                 dispose();
-            }
-            else{
-                messageController.sendMessage("/unBan:"+nom);
+            } else {
+                messageController.sendMessage("/unBan:" + nom);
                 dispose();
             }
         }
 
-        if (e.getSource() == stat){
-            if (userType != 1){
+        if (e.getSource() == user_type) {
+            if (userType != 1) {
                 JOptionPane.showMessageDialog(this, "YOU CANNOT!");
-                dispose();
+            } else {
+                CardLayout cl = (CardLayout) cards.getLayout();
+                cl.next(cards); // Basculer entre les cartes (boutons de type dutilisateur et vide) lorsque le bouton user_type est cliqué.
             }
         }
-        if (e.getSource() == user_type){
-            if (userType != 1){
-                JOptionPane.showMessageDialog(this, "YOU CANNOT!");
-                dispose();
-            }
+        if (e.getSource() == setClassicButton) {
+            messageController.sendMessage("/setUserType:" + nom + ":classic");
+            dispose();
         }
 
-    }
-    @Override
-    public void update(Observable o, Object arg) {
+        if (e.getSource() == setAdminButton) {
+            messageController.sendMessage("/setUserType:" + nom + ":admin");
+            dispose();
+        }
+
+        if (e.getSource() == setModeratorButton) {
+            messageController.sendMessage("/setUserType:" + nom + ":moderator");
+            dispose();
+        }
 
     }
 }
-

@@ -18,7 +18,7 @@ import java.util.Set;
 public class Server {
 
     private static final int SERVER_PORT = 9999;
-    private static final String SERVER_IP = "10.63.21.153";
+    private static final String SERVER_IP = "10.188.41.187";
 
     static Set<String> bannedUser = new HashSet<>();
 
