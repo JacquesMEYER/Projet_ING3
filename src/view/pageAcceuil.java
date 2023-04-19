@@ -219,7 +219,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         });
         timer.start();
     }
-    public void updateUserTypeLabel() {//
+    public void updateUserTypeLabel() {//lulkvjhv ;j
         userTypeLabel.setText("(" + messageController.getModel().getUser().getUserType() + ")");
     }
 
