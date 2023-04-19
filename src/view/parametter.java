@@ -42,10 +42,6 @@ public class parametter extends JFrame implements ActionListener {
         // Créez un nouveau JPanel pour les boutons de type d'utilisateur
         userTypeButtonsPanel = new JPanel(new GridLayout(3, 1));
 
-        setClassicButton = new JButton("Set Classic");
-        setClassicButton.addActionListener(this);
-        userTypeButtonsPanel.add(setClassicButton);
-
         setAdminButton = new JButton("Set Admin");
         setAdminButton.addActionListener(this);
         userTypeButtonsPanel.add(setAdminButton);
@@ -53,6 +49,10 @@ public class parametter extends JFrame implements ActionListener {
         setModeratorButton = new JButton("Set Moderator");
         setModeratorButton.addActionListener(this);
         userTypeButtonsPanel.add(setModeratorButton);
+
+        setClassicButton = new JButton("Set Classic");
+        setClassicButton.addActionListener(this);
+        userTypeButtonsPanel.add(setClassicButton);
 
         // Créez un JPanel avec un CardLayout pour gérer l'affichage des boutons de type d'utilisateur
         cards = new JPanel(new CardLayout());
@@ -108,19 +108,33 @@ public class parametter extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "YOU CANNOT!");
             }
         }
+
         if (e.getSource() == setClassicButton) {
+
+            if (userType == 1 ||userType == 2 ) {
             messageController.sendMessage("/setUserType: " + messageController.getModel().getUser().getUsername() + " classic");
             dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "YOU CANNOT!");
+            }
         }
 
         if (e.getSource() == setAdminButton) {
+            if (userType == 1 ) {
             messageController.sendMessage("/setUserType: " + messageController.getModel().getUser().getUsername() + " admin");
             dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "YOU CANNOT!");
+            }
         }
 
         if (e.getSource() == setModeratorButton) {
+            if (userType == 1  ||userType == 2) {
             messageController.sendMessage("/setUserType: " + messageController.getModel().getUser().getUsername() + " moderator");
             dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "YOU CANNOT!");
+            }
         }
 
     }
