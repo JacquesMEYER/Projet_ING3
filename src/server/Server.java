@@ -1,6 +1,7 @@
 package server;
 
 import DAO.ConnectionDB;
+import DAO.MessageDAO;
 import DAO.UserDAO;
 import model.IPAddress;
 
@@ -58,14 +59,14 @@ public class Server {
 
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(username)) {
-                handler.getWriter().println(userSender+" (private message from " + userSender + ") " + message);
+                handler.getWriter().println("(private message from " + userSender + ") " + message);
 
                 break;
             }
         }
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(userSender)) {
-                handler.getWriter().println(userSender+" (private message to " + username + ") " + message);
+                handler.getWriter().println("(private message to " + username + ") " + message);
                 break;
             }
         }
@@ -74,7 +75,7 @@ public class Server {
     public static void broadcastMessage(String message) {
         for (ClientHandler handler : clientHandlers) {
             if (bannedUser.contains(handler.getUsername())) {
-                handler.getWriter().println("* pas de message pour toi, t'es banni!!!!! *");
+                handler.getWriter().println("pas de message pour toi, t'es banni!!!!!");
             } else {
                 handler.getWriter().println(message);
             }
@@ -102,7 +103,7 @@ public class Server {
     public static void sendMessageTBanned(String username) {
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(username)) {
-                handler.getWriter().println("* pas de message pour toi, t'es banni *");
+                handler.getWriter().println("pas de message pour toi, t'es banni");
             }
         }
     }
@@ -193,18 +194,4 @@ public class Server {
             throw new RuntimeException(e);
         }
     }
-    public static void changeType(String targetUsername, String type, String userSender) {
-
-        for (ClientHandler handler : clientHandlers) {
-            if (handler.getUsername().equalsIgnoreCase(targetUsername)) {
-                broadcastMessage("* "+ userSender+" set "+targetUsername+" to "+type+" *" );
-                handler.getWriter().println("/changeType:" + type);
-                break;
-            }
-        }
-
-
-    }
-
-
 }
