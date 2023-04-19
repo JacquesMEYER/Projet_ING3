@@ -10,7 +10,7 @@ public class Utilisateur {
 
     Utilisateur(String pseudo,String mdp){
         this.username=pseudo;
-        this.password=mdp;
+        this.password=mdp; //test
         this.userType= Utilisateur.UserType.ADMINISTRATOR;
 
     }
