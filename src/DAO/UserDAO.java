@@ -47,12 +47,33 @@ public class UserDAO implements DAO<Utilisateur> {
         }
     }
 
+    public boolean isCorrectUser(String name, String pwd) {
+        try {
+            PreparedStatement statement0 = conn.prepareStatement("SELECT username FROM user WHERE username = ?");
+            PreparedStatement statement1 = conn.prepareStatement("SELECT pwd FROM user WHERE pwd = ?");
+
+            statement0.setString(1, name);
+            statement1.setString(1, hashPassword(pwd));
+            ResultSet rs0 = statement0.executeQuery();
+            ResultSet rs1 = statement1.executeQuery();
+            if (rs0.next() || rs1.next()) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void addUser(String username, String pwd) throws NoSuchAlgorithmException {
         //méthode pour ajouter un utilisateur dans la base de données
         try {
+            System.out.println("existe pas encore");
             Statement stmt = this.conn.createStatement();
             String query = "INSERT INTO user(username, pwd) VALUES('" + username + "', '" + hashPassword(pwd) + "')";
             stmt.executeUpdate(query);
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -72,8 +93,6 @@ public class UserDAO implements DAO<Utilisateur> {
     public boolean isValidUser(String username, String password) throws NoSuchAlgorithmException {
         // cryptage du mot de passe écrit par l'utilisateur
         String hashedPwd = hashPassword(password);
-        System.out.println(hashedPwd);
-
         // recherche dans la BDD s'il existe un utilisateur avec le nom et mot de passe entrés
         try {
             PreparedStatement statement = conn.prepareStatement("SELECT pwd FROM user WHERE username = ?");

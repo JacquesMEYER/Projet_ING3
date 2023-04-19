@@ -160,7 +160,6 @@ public class Server {
                         handler.getWriter().println("The user has an account");
                         handler.setUsername(username);
                         broadcastMessage("* " + username + " has entered the chat *");
-
                         break;
                     }
                 }
@@ -181,13 +180,26 @@ public class Server {
     }
 
     public static void inscription(String username, String password) {
+        boolean isCorrect = false;
         // utilisation du UserDAO
         try {
             Connection conn = ConnectionDB.getConnection();
             UserDAO userDao = new UserDAO(conn);
+            isCorrect = userDao.isCorrectUser(username, password);
 
-            userDao.addUser(username, password);
+            if(isCorrect) {
+                for (ClientHandler handler : clientHandlers) {
+                        handler.getWriter().println("The user doesn't exist");
+                        userDao.addUser(username, password);
+                        break;
+                }
 
+            } else {
+                for (ClientHandler handler : clientHandlers) {
+                    handler.getWriter().println("The user already exist");
+                    break;
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (NoSuchAlgorithmException e) {
