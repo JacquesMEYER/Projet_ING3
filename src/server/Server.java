@@ -3,6 +3,7 @@ package server;
 import DAO.ConnectionDB;
 import DAO.UserDAO;
 import model.IPAddress;
+import view.pageAcceuil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -75,7 +76,8 @@ public class Server {
         for (ClientHandler handler : clientHandlers) {
             if (bannedUser.contains(handler.getUsername())) {
                 handler.getWriter().println("* pas de message pour toi, t'es banni!!!!! *");
-            } else {
+            }
+            else {
                 handler.getWriter().println(message);
             }
         }
@@ -202,9 +204,8 @@ public class Server {
                 break;
             }
         }
-
-
     }
-
-
+    public static void displayGif(String gif, String userSender){
+        broadcastMessage("/GIF: " + gif + " " + userSender);
+    }
 }

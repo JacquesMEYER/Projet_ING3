@@ -76,8 +76,15 @@ class ClientHandler implements Runnable {
                         String nom = parts[1];
                         String mdp = parts[2];
                         Server.isValidUser(nom,mdp);
-                    }
-                    else if (onlyTheMessage.startsWith("/testInscription:")) {
+                    } else if (onlyTheMessage.startsWith("/GIF:")) {
+                        //String url = onlyTheMessage.substring("/GIF:".length());
+                        String[] parts = onlyTheMessage.split(" ", 2);
+                        String url = parts[0].substring("/GIF:".length());
+                        Server.displayGif(url, userSender);
+                        //System.out.println("hello");
+                        // Créer fonction dans server et clientHandler
+
+                    } else if (onlyTheMessage.startsWith("/testInscription:")) {
                         String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
                         String nom = parts[1];
                         String mdp = parts[2];

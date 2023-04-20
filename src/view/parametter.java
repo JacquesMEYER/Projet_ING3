@@ -100,7 +100,7 @@ public class parametter extends JFrame implements ActionListener {
             }
         }
 
-        if (e.getSource() == user_type) {
+        if (e.getSource() == user_type) { // Juste le 1 à le droit de faire ça non ?
             if (userType == 1 ||userType == 2 ) {
                 CardLayout cl = (CardLayout) cards.getLayout();
                 cl.next(cards); // Basculer entre les cartes (boutons de type dutilisateur et vide) lorsque le bouton user_type est cliqué.

@@ -54,6 +54,8 @@ public class Client extends Observable {
         out.println(user.getUsername() + "¤" + message);
     }
 
+
+
     private void receiveMessage(String message) {
         setChanged();
         notifyObservers(message);
