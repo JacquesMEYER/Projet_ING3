@@ -27,7 +27,8 @@ public class pageAcceuil extends JFrame implements ActionListener {
     Vector<JButton> userButtons;
     //static Set<String> nomsCo = new HashSet<>(Arrays.asList("jac","rom","alix","ethan"));
 
-    Color bleuclair = new Color(214, 234, 248);
+    Color bleuclair = new Color(234, 242, 248);
+    Color bleufonce2 = new Color(31, 97, 141);
     HTMLEditorKit editorKit;
     HTMLDocument doc;
 
@@ -78,7 +79,23 @@ public class pageAcceuil extends JFrame implements ActionListener {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
         JLabel userListLabel = new JLabel("Utilisateurs");
-        leftPanel.add(userListLabel, BorderLayout.NORTH);
+        leftPanel.add(userListLabel, BorderLayout.BEFORE_FIRST_LINE);
+
+        //Bouton profil
+        JButton profilButton = new JButton("\ud83d\udc64");
+        profilButton.setBackground(bleufonce2);
+        profilButton.setForeground(bleuclair);
+        leftPanel.add(profilButton, BorderLayout.PAGE_END);
+        profilButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame f = new ProfilWindow();
+                f.setVisible(true);
+            }
+        });
+
+        JPanel listPanel= new JPanel();
+        listPanel.setLayout(new BorderLayout());
 
         userButtonsPanel = new JPanel();
         userButtonsPanel.setLayout(new BoxLayout(userButtonsPanel, BoxLayout.Y_AXIS));
@@ -99,8 +116,33 @@ public class pageAcceuil extends JFrame implements ActionListener {
             });
         }
         leftPanel.add(userButtonsPanel, BorderLayout.CENTER);
-        mainPanel.add(leftPanel, BorderLayout.WEST);
 
+        //creation de la barre de recherche
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new BorderLayout());
+        JTextField searchField = new JTextField();
+        searchPanel.add(searchField, BorderLayout.CENTER);
+        JButton searchButton = new JButton("\uD83D\uDD0E");
+        searchPanel.add(searchButton, BorderLayout.EAST);
+        //definir la focntion qui permet de rechercher un utilisateur
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                /*String searchText = searchField.getText();
+                ListModel<String> userListModel = nomsCo.getModel();
+
+                for (int i = 0; i < userListModel.getSize(); i++) {
+                    String user = userListModel.getElementAt(i);
+                    if (user.toLowerCase().contains(searchText.toLowerCase())) {
+                        nomsCo.setSelectedIndex(i);
+                        break;
+                    }
+                }*/
+            }
+        });
+
+        listPanel.add(searchPanel, BorderLayout.SOUTH);
+        mainPanel.add(leftPanel, BorderLayout.WEST);
 
         // Création du panneau central pour le salon de discussion et les messages
         JPanel centerPanel = new JPanel();
@@ -123,13 +165,16 @@ public class pageAcceuil extends JFrame implements ActionListener {
         bottomPanel.setLayout(new BorderLayout());
         messageField = new JTextField();
         bottomPanel.add(messageField, BorderLayout.CENTER);
-        sendButton = new JButton("Envoyer");
+        //sendButton = new JButton("Envoyer");
+        sendButton = new JButton("\u27a4");
+        sendButton.setForeground(Color.WHITE);
+        sendButton.setBackground(new Color(31, 97, 141));
 
         // Création d'un JPanel pour afficher le type d'utilisateur
         JPanel userTypePanel = new JPanel();
         userTypePanel.setLayout(new BorderLayout());
         userTypeLabel = new JLabel("(" + messageController.getModel().getUser().getUserType()+")");
-       // userTypeLabel = new JLabel("zizi");
+        userTypePanel.add(userTypeLabel, BorderLayout.NORTH);
 
         userTypePanel.add(userTypeLabel, BorderLayout.NORTH);
 

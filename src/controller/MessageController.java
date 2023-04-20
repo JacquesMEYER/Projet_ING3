@@ -72,8 +72,6 @@ public class MessageController extends BaseController {
             String[] parts = message.split(" ", 2);
             String type = parts[0].substring("/changeType:".length());
 
-
-
             //System.out.println(type);
 
             changeType(type);

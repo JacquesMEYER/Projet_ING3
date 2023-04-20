@@ -27,8 +27,23 @@ public class UserDAO implements DAO<Utilisateur> {
     }
 
     public List<Utilisateur> getAllUsers() {
-        //code pour récupérer tous les utilisateurs
         return null;
+    }
+
+    public int nbUsers() {
+        int nbLignes = 0;
+        try {
+            Statement stmt = this.conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS 'username' FROM user");
+
+            if(rs.next()) {
+                nbLignes = rs.getInt("username");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return nbLignes;
     }
 
     public static String hashPassword(String password) {
