@@ -160,6 +160,7 @@ public class Server {
                         handler.getWriter().println("The user has an account");
                         handler.setUsername(username);
                         broadcastMessage("* " + username + " has entered the chat *");
+
                         break;
                     }
                 }
