@@ -1,5 +1,7 @@
 package server;
 
+import model.Utilisateur;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -86,7 +88,7 @@ class ClientHandler implements Runnable {
                         String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
                         String targetUsername = parts[1];
                         String type = parts[2];
-                        //Server.changeType(targetUsername, type, userSender);
+                        Server.changeType(targetUsername, Utilisateur.UserType.valueOf(type), userSender);
                     }
 
                     else {

@@ -4,6 +4,7 @@ import DAO.ConnectionDB;
 import DAO.MessageDAO;
 import DAO.UserDAO;
 import model.IPAddress;
+import model.Utilisateur;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -148,16 +149,18 @@ public class Server {
 
     public static void isValidUser(String username, String password) {
         boolean isValid = false;
+        Utilisateur.UserType type = null;
 
         try {
             Connection conn = ConnectionDB.getConnection();
             UserDAO userDao = new UserDAO(conn);
             isValid = userDao.isValidUser(username, password);
+            type = userDao.getUserTypeByUsername(username);
 
             if(isValid) {
                 for (ClientHandler handler : clientHandlers) {
                     if (handler.getUsername().equalsIgnoreCase("unknown")) {
-                        handler.getWriter().println("The user has an account");
+                        handler.getWriter().println("The user has an account" + type);
                         handler.setUsername(username);
                         broadcastMessage("* " + username + " has entered the chat *");
 

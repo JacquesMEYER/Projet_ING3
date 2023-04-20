@@ -2,13 +2,6 @@ package DAO;
 
 import model.Utilisateur;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.AlgorithmParameters;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -21,9 +14,25 @@ public class UserDAO implements DAO<Utilisateur> {
         this.conn = connection;
     }
 
-    public Utilisateur getUserById(int id) {
+    public Utilisateur.UserType getUserTypeByUsername(String username) {
+        Utilisateur.UserType type = null;
+
         //code pour récupérer un utilisateur en utilisant l'identifiant
-        return null;
+        try {
+            PreparedStatement statement = conn.prepareStatement("SELECT type FROM user WHERE username = ?");
+
+            statement.setString(1, username);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                type = Utilisateur.UserType.valueOf(rs.getString("type"));
+            } else {
+                System.out.println("problème de lecture du type dans la bdd");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return type;
     }
 
     public List<Utilisateur> getAllUsers() {
@@ -98,7 +107,7 @@ public class UserDAO implements DAO<Utilisateur> {
         //code pour mettre à jour un utilisateur
         try {
             Statement stmt = this.conn.createStatement();
-            String query = "UPDATE user(username, pwd, status) SET ('" + user.getUsername() + "', '" + user.getPassword() + "', '" + user.getStatus() + "')";
+            String query = "UPDATE user(username, pwd, type) SET ('" + user.getUsername() + "', '" + user.getPassword() + "', '" + user.getUserType() + "')";
             stmt.executeUpdate(query);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -116,7 +125,6 @@ public class UserDAO implements DAO<Utilisateur> {
 
             if(rs.next()) {
                 String correctHashedPwd = rs.getString("pwd");
-                System.out.println(correctHashedPwd);
 
                 if(correctHashedPwd.equals(hashedPwd)) {
                     return true;

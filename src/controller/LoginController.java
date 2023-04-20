@@ -1,5 +1,6 @@
 package controller;
 
+import model.Utilisateur;
 import view.LoginPage;
 import model.Client;
 
@@ -42,7 +43,10 @@ public class LoginController extends BaseController implements Observer {
     public void update(Observable o, Object arg) {
         String message = (String) arg;
 
-        if (message.equals("The user has an account")) {
+        if (message.startsWith("The user has an account")) {
+            Utilisateur.UserType type = Utilisateur.UserType.valueOf(message.substring(23)); // index du fin de la chaine "The user has an account"
+            model.getUser().setUserType(type);
+            System.out.println(model.getUser().getUserType());
             setUserIsValid(true);
         } else if (message.equals("The user has no account")) {
             setUserIsValid(false);

@@ -168,6 +168,7 @@ public class ProfilWindow extends JFrame {
 
 
         JButton saveButton= new JButton("Save Changes \u2705");
+        // déclencher la fonction updateUser dans DAO
         saveButton.setForeground(Color.WHITE);
         saveButton.setBackground(new Color(33, 141, 10));
 
