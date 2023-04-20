@@ -2,25 +2,23 @@ package view;
 
 import controller.MessageController;
 
+import javax.swing.Timer;
 import javax.swing.*;
-import java.net.MalformedURLException;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import javax.swing.Timer;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
 
 public class pageAcceuil extends JFrame implements ActionListener {
-    private  MessageController messageController;
+    private MessageController messageController;
 
     static JEditorPane chatArea;
     JPanel userButtonsPanel;
@@ -43,7 +41,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         userButtonsPanel.removeAll();
         String nomV2 = "";
         for (String nom : nomsCo) {
-            if (!Objects.equals(nom, "unknown")){
+            if (!Objects.equals(nom, "unknown")) {
                 if (nom == messageController.getModel().getUser().getUsername()) {
                     nomV2 = nom + " (me)";
                 } else nomV2 = nom;
@@ -97,7 +95,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
             }
         });
 
-        JPanel listPanel= new JPanel();
+        JPanel listPanel = new JPanel();
         listPanel.setLayout(new BorderLayout());
         JLabel userListLabel = new JLabel("         User List       ");
         listPanel.add(userListLabel, BorderLayout.NORTH);
@@ -105,8 +103,6 @@ public class pageAcceuil extends JFrame implements ActionListener {
         userButtonsPanel.setLayout(new BoxLayout(userButtonsPanel, BoxLayout.Y_AXIS));
         userButtons = new Vector<>();
         JScrollPane userButtonScrollPane = new JScrollPane(userButtonsPanel);
-
-
 
 
         for (String nom : nomsCo) {
@@ -145,9 +141,9 @@ public class pageAcceuil extends JFrame implements ActionListener {
                     } else {
                         userButton.setVisible(false); //masquer les boutons utilisateur qui ne correspondent pas
                     }
-                }            }
+                }
+            }
         });
-
 
 
         listPanel.add(searchPanel, BorderLayout.SOUTH);
@@ -196,7 +192,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         // Création d'un JPanel pour afficher le type d'utilisateur
         JPanel userTypePanel = new JPanel();
         userTypePanel.setLayout(new BorderLayout());
-        userTypeLabel = new JLabel("(" + messageController.getModel().getUser().getUserType()+")");
+        userTypeLabel = new JLabel("(" + messageController.getModel().getUser().getUserType() + ")");
         userTypePanel.add(userTypeLabel, BorderLayout.NORTH);
 
 
@@ -285,7 +281,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
     public void addMessage(String message) {
         //chatArea.append(message + "\n");
-        sendMessageLeft(message+ "\n");
+        sendMessageLeft(message + "\n");
     }
 
     public void setNomsCo(Set<String> nomsCo) {
@@ -312,6 +308,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         });
         timer.start();
     }
+
     public void updateUserTypeLabel() {//lulkvjh
         userTypeLabel.setText("(" + messageController.getModel().getUser().getUserType() + ")");
     }
@@ -327,6 +324,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         String rightStyle = "<div style='text-align: right; background-color: #85C1E9; color:white; max-width: 50px; padding: 5px 10px; border:0px black solid; margin-left:350px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white;display: inline-flex; '>%s</span></div><br>";
         appendMessage(mess, currentTime, rightStyle);
     }
+
     //    background-size: 10px; display: inline-block;
     public void sendMessageLeft(String mess) {
         String currentTime = getCurrentTime();
