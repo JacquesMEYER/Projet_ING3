@@ -81,14 +81,13 @@ public class pageAcceuil extends JFrame implements ActionListener {
         // Création du panneau de gauche pour la liste des utilisateurs et la barre de recherche
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
-        JLabel userListLabel = new JLabel("Utilisateurs");
-        leftPanel.add(userListLabel, BorderLayout.BEFORE_FIRST_LINE);
+
 
         //Bouton profil
         JButton profilButton = new JButton("\ud83d\udc64");
         profilButton.setBackground(bleufonce2);
         profilButton.setForeground(bleuclair);
-        leftPanel.add(profilButton, BorderLayout.PAGE_END);
+        leftPanel.add(profilButton, BorderLayout.NORTH);
         profilButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -99,14 +98,19 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
         JPanel listPanel= new JPanel();
         listPanel.setLayout(new BorderLayout());
-
+        JLabel userListLabel = new JLabel("         User List       ");
+        listPanel.add(userListLabel, BorderLayout.NORTH);
         userButtonsPanel = new JPanel();
         userButtonsPanel.setLayout(new BoxLayout(userButtonsPanel, BoxLayout.Y_AXIS));
         userButtons = new Vector<>();
+        JScrollPane userButtonScrollPane = new JScrollPane(userButtonsPanel);
+
+
 
 
         for (String nom : nomsCo) {
             JButton userButton = new JButton(nom);
+
             userButtons.add(userButton); //ajout au vecteur
             userButtonsPanel.add(userButton);// ajout du vecteur au left pannel
             userButton.addActionListener(new ActionListener() {
@@ -118,7 +122,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
                 }
             });
         }
-        leftPanel.add(userButtonsPanel, BorderLayout.CENTER);
+        listPanel.add(userButtonScrollPane, BorderLayout.CENTER);
 
         //creation de la barre de recherche
         JPanel searchPanel = new JPanel();
@@ -127,25 +131,28 @@ public class pageAcceuil extends JFrame implements ActionListener {
         searchPanel.add(searchField, BorderLayout.CENTER);
         JButton searchButton = new JButton("\uD83D\uDD0E");
         searchPanel.add(searchButton, BorderLayout.EAST);
+
         //definir la focntion qui permet de rechercher un utilisateur
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /*String searchText = searchField.getText();
-                ListModel<String> userListModel = nomsCo.getModel();
-
-                for (int i = 0; i < userListModel.getSize(); i++) {
-                    String user = userListModel.getElementAt(i);
-                    if (user.toLowerCase().contains(searchText.toLowerCase())) {
-                        nomsCo.setSelectedIndex(i);
-                        break;
+                String searchTerm = searchField.getText().toLowerCase(); //obtenir le texte de recherche saisi et le convertir en minuscules pour une correspondance insensible à la casse
+                for (JButton userButton : userButtons) { //parcourir tous les boutons d'utilisateur
+                    String buttonText = userButton.getText().toLowerCase(); //obtenir le texte du bouton et le convertir en minuscules pour une correspondance insensible à la casse
+                    if (buttonText.contains(searchTerm)) { //vérifier si le terme de recherche est contenu dans le texte du bouton
+                        userButton.setVisible(true); //afficher le bouton utilisateur correspondant
+                    } else {
+                        userButton.setVisible(false); //masquer les boutons utilisateur qui ne correspondent pas
                     }
-                }*/
-            }
+                }            }
         });
 
+
+
         listPanel.add(searchPanel, BorderLayout.SOUTH);
+        leftPanel.add(listPanel, BorderLayout.CENTER);
         mainPanel.add(leftPanel, BorderLayout.WEST);
+
 
         // Création du panneau central pour le salon de discussion et les messages
         JPanel centerPanel = new JPanel();
@@ -168,10 +175,9 @@ public class pageAcceuil extends JFrame implements ActionListener {
         bottomPanel.setLayout(new BorderLayout());
         messageField = new JTextField();
         bottomPanel.add(messageField, BorderLayout.CENTER);
-        //sendButton = new JButton("Envoyer");
         sendButton = new JButton("\u27a4");
         sendButton.setForeground(Color.WHITE);
-        sendButton.setBackground(new Color(31, 97, 141));
+        sendButton.setBackground(new Color(18, 91, 218, 255));
 
         // Création d'un JPanel pour afficher le type d'utilisateur
         JPanel userTypePanel = new JPanel();

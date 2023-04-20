@@ -1,7 +1,8 @@
 package view;
 
 
-import DAO.UserDAO;
+import controller.LoginController;
+import model.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,28 +25,24 @@ public class ProfilWindow extends JFrame {
     private JButton logOutButton;
     private JButton returnButton;
 
-    Color bleuclair = new Color(230, 242, 240);
-    Color bleufonce2 = new Color(31, 97, 141);
-    Color bleufonce3 = new Color(23, 32, 42);
+
 
     public ProfilWindow() {
         // Création de la fenêtre principale
         setTitle("Profil");
         setSize(600, 400);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Création du panneau principal
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.setBackground(bleuclair);
 
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
-        leftPanel.setBackground(bleuclair);
+
 
         returnButton = new JButton("\u2b98 Back");
-        returnButton.setBackground(bleufonce3);
-        returnButton.setForeground(bleuclair);
         leftPanel.add(returnButton, BorderLayout.NORTH);
         returnButton.addActionListener(new ActionListener() {
             @Override
@@ -56,14 +53,9 @@ public class ProfilWindow extends JFrame {
 
         //init parameters panel
         JPanel informationPanel = new JPanel();
-        informationPanel.setBackground(bleuclair);
         informationPanel.setLayout(new GridLayout( 4,1));
         JButton parameterButton = new JButton("Edit profil \u270E");
-        parameterButton.setBackground(bleufonce2);
-        parameterButton.setForeground(bleuclair);
         JButton statsButton = new JButton("Stats");
-        statsButton.setBackground(bleufonce2);
-        statsButton.setForeground(bleuclair);
         informationPanel.add(parameterButton);
         informationPanel.add(statsButton);
         leftPanel.add(informationPanel,BorderLayout.CENTER);
@@ -72,20 +64,28 @@ public class ProfilWindow extends JFrame {
         logOutButton.setForeground(Color.WHITE);
         logOutButton.setBackground(new Color(204, 13, 13));
         leftPanel.add(logOutButton, BorderLayout.SOUTH);
+        logOutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                dispose();
+                //System.exit(0);
+                Client model = new Client(); //creer le client apres la page login sinon entered trop tot
+
+                LoginController loginController = new LoginController(model);
+                LoginPage view = new LoginPage(loginController);
+                loginController.setView(view);
+            }
+        });
+
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BorderLayout());
-        centerPanel.setBackground(bleuclair);
 
         JLabel informationLabel = new JLabel("Edit Information");
         centerPanel.add(informationLabel, BorderLayout.NORTH);
-        informationLabel.setBackground(bleufonce3);
-        parameterButton.setForeground(bleuclair);
 
         JPanel displayPanel = new JPanel(new GridLayout(7, 2));
-        displayPanel.setBackground(bleuclair);
-
-
         JScrollPane paramScrollPane = new JScrollPane(displayPanel);
         centerPanel.add(paramScrollPane,BorderLayout.CENTER);
 
@@ -99,8 +99,6 @@ public class ProfilWindow extends JFrame {
         userImageLabel.setForeground(Color.BLACK);
         containImageLabel.add(userImageLabel);
         JButton imageButton = new JButton("Upload Image \ud83d\udce5");
-        imageButton.setBackground(bleufonce2);
-        imageButton.setForeground(bleuclair);
         displayPanel.add(imageButton);
 
         imageButton.addActionListener(new ActionListener() {
@@ -129,22 +127,19 @@ public class ProfilWindow extends JFrame {
         });
 
         JLabel userNameLabel = new JLabel("Name : ");
-        userNameLabel.setBackground(bleufonce3);
         displayPanel.add(userNameLabel);
         JTextField nameField = new JTextField("Romain");
         displayPanel.add(nameField);
         nameField.setSize(200, 24);
 
         JLabel userPseudoLabel = new JLabel("Pseudo : ");
-        userPseudoLabel.setBackground(bleufonce3);
         displayPanel.add(userPseudoLabel);
         JTextField pseudoField = new JTextField("roro_69");
         displayPanel.add(pseudoField);
         pseudoField.setSize(200, 24);
 
         JLabel userPWLabel = new JLabel("Password : ");
-        userPWLabel.setBackground(bleufonce3);
-        //userPWLabel.setBackground(Color.BLUE);
+        userPWLabel.setBackground(Color.BLUE);
         displayPanel.add(userPWLabel);
         JTextField pwField = new JTextField("roro1234");
         displayPanel.add(pwField);
@@ -152,20 +147,16 @@ public class ProfilWindow extends JFrame {
 
         JLabel userStatusLabel = new JLabel("Status : ");
         displayPanel.add(userStatusLabel);
+        //JTextField statusField = new JTextField("online");
+        //displayPanel.add(statusField);
 
         JCheckBox onlineCheckbox = new JCheckBox("online");
-        onlineCheckbox.setForeground(bleufonce3);
-        onlineCheckbox.setBackground(bleuclair);
         displayPanel.add(onlineCheckbox);
         displayPanel.add(new JLabel());
         JCheckBox offlineCheckbox = new JCheckBox("offline");
-        offlineCheckbox.setForeground(bleufonce3);
-        offlineCheckbox.setBackground(bleuclair);
         displayPanel.add(offlineCheckbox);
         displayPanel.add(new JLabel());
         JCheckBox awayCheckbox = new JCheckBox("away");
-        awayCheckbox.setForeground(bleufonce3);
-        awayCheckbox.setBackground(bleuclair);
         displayPanel.add(awayCheckbox);
         //fonctions pour avoir seulement une box check a la fois
         ButtonGroup checkBoxGroup = new ButtonGroup();
@@ -204,6 +195,12 @@ public class ProfilWindow extends JFrame {
         statsPanel.add(numberOnlineLabel);
         JLabel numberOnline = new JLabel("2");
         statsPanel.add(numberOnline);
+
+
+
+
+
+
         statsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -214,7 +211,10 @@ public class ProfilWindow extends JFrame {
                 centerPanel.add(statsLabel, BorderLayout.NORTH);
                 centerPanel.add(statsScrollPane,BorderLayout.CENTER);
 
+
                 setContentPane(mainPanel);
+
+
             }
         });
 
@@ -227,13 +227,23 @@ public class ProfilWindow extends JFrame {
                 centerPanel.add(saveButton, BorderLayout.SOUTH);
                 centerPanel.add(paramScrollPane, BorderLayout.CENTER);
                 setContentPane(mainPanel);
+
+
             }
         });
+
+
         mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
+
+
+
+
         // Ajout du panneau principal à la fenêtre
         setContentPane(mainPanel);
     }
+
+
 
     // Methode to resize imageIcon with the same size of a Jlabel
     public ImageIcon ResizeImage(String ImagePath, JLabel label)
@@ -244,4 +254,11 @@ public class ProfilWindow extends JFrame {
         ImageIcon image = new ImageIcon(newImg);
         return image;
     }
+
+
+    /*public static void main(String[] args) {
+        ProfilWindow window = new ProfilWindow();
+        window.setVisible(true);
+    }*/
 }
+
