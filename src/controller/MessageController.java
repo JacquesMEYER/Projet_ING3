@@ -74,14 +74,15 @@ public class MessageController extends BaseController {
             String[] parts = message.split("\\s+"); // Divise la chaîne en fonction des espaces
             String url = parts[1];
             String userSender = parts[2];
+            //System.out.println("Test if arrivé gif Client/MessageControler " + url + " " + userSender);
             if (userSender.equals(getModel().getUser().getUsername())){
-                pageAcceuil.addGifRight(url);
+                view.addGif(url, false);
+                System.out.println("test addGifLeft()");
             }else  {
                 view.sendMessageLeft(userSender);
-                pageAcceuil.addGifLeft(url);
+                view.addGif(url, true);
+                System.out.println("test addGifRight()");
             }
-
-
         } else if (message.startsWith("/changeType:")) {
             String[] parts = message.split(" ", 2);
             String type = parts[0].substring("/changeType:".length());

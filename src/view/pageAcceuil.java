@@ -34,8 +34,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
     Color bleufonce2 = new Color(31, 97, 141);
     HTMLEditorKit editorKit;
     HTMLDocument doc;
-    static HTMLEditorKit editorKit;
-    static HTMLDocument doc;
+
 
     private static Set<String> nomsCo = new HashSet<>(Arrays.asList("-"));
 
@@ -260,51 +259,24 @@ public class pageAcceuil extends JFrame implements ActionListener {
         messageField.setText("");
     }
 
-    public static void addGifRight(String urlMessage) {
-        String gifUrl="";
-        if(Objects.equals(urlMessage, "GIFhappy")){
-            gifUrl="https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif";
-        }
-        else if(Objects.equals(urlMessage, "GIFsurprised")){
-            gifUrl="https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif";
-        }
-        else if(Objects.equals(urlMessage, "GIFangry")){
-            gifUrl="https://media.giphy.com/media/3t7RAFhu75Wwg/giphy.gif";
-        }
-        else if(Objects.equals(urlMessage, "GIFsad")){
-            gifUrl="https://media.giphy.com/media/d2lcHJTG5Tscg/giphy.gif";
-        }
-        String currentTime = getCurrentTime();
-        String rightStyle = "<div style='text-align: right; max-width: 100%%; margin-bottom: 5px;'><img src='%s' width='300' height='200'><br><span style='font-size: 0.8em; color: white;display: inline-flex;'>%s</span></div>";
-        String formattedMessage = String.format(rightStyle, gifUrl, currentTime);
-        try {
-            editorKit.insertHTML(doc, doc.getLength(), formattedMessage, 0, 0, null);
-            chatArea.setCaretPosition(chatArea.getDocument().getLength());
-        } catch (BadLocationException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void addGifLeft(String urlMessage) {
-        String gifUrl="";
-        if(Objects.equals(urlMessage, "GIFhappy")){
-            gifUrl="https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif";
-        }
-        else if(Objects.equals(urlMessage, "GIFsurprised")){
-            gifUrl="https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif";
-        }
-        else if(Objects.equals(urlMessage, "GIFangry")){
-            gifUrl="https://media.giphy.com/media/3t7RAFhu75Wwg/giphy.gif";
-        }
-        else if(Objects.equals(urlMessage, "GIFsad")){
-            gifUrl="https://media.giphy.com/media/d2lcHJTG5Tscg/giphy.gif";
+    public void addGif(String urlMessage, boolean isLeft) {
+        System.out.println("TEST");
+        String gifUrl = "";
+        if (Objects.equals(urlMessage, "GIFhappy")) {
+            gifUrl = "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif";
+        } else if (Objects.equals(urlMessage, "GIFsurprised")) {
+            gifUrl = "https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif";
+        } else if (Objects.equals(urlMessage, "GIFangry")) {
+            gifUrl = "https://media.giphy.com/media/3t7RAFhu75Wwg/giphy.gif";
+        } else if (Objects.equals(urlMessage, "GIFsad")) {
+            gifUrl = "https://media.giphy.com/media/d2lcHJTG5Tscg/giphy.gif";
         }
 
         String currentTime = getCurrentTime();
-        String rightStyle = "<div style='text-align: left; max-width: 100%%; margin-bottom: 5px;'><img src='%s' width='300' height='200'><br><span style='font-size: 0.8em; color: white;display: inline-flex;'>%s</span></div>";
-        String formattedMessage = String.format(rightStyle, gifUrl, currentTime);
+        String align = isLeft ? "left" : "right";
+        String style = String.format("<div style='text-align: %s; max-width: 100%%; margin-bottom: 5px;'><img src='%s' width='300' height='200'><br><span style='font-size: 0.8em; color: white;display: inline-flex;'>%s</span></div>", align, gifUrl, currentTime);
         try {
-            editorKit.insertHTML(doc, doc.getLength(), formattedMessage, 0, 0, null);
+            editorKit.insertHTML(doc, doc.getLength(), style, 0, 0, null);
             chatArea.setCaretPosition(chatArea.getDocument().getLength());
         } catch (BadLocationException | IOException e) {
             e.printStackTrace();

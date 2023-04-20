@@ -220,5 +220,6 @@ public class Server {
     }
     public static void displayGif(String gif, String userSender){
         broadcastMessage("/GIF: " + gif + " " + userSender);
+        //System.out.println("test broadvast gif");
     }
 }

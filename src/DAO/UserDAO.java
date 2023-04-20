@@ -94,16 +94,17 @@ public class UserDAO implements DAO<Utilisateur> {
         }
     }
 
-    public void updateUser(Utilisateur user) {
+    /*public void updateUser(Utilisateur user) {
         //code pour mettre à jour un utilisateur
         try {
             Statement stmt = this.conn.createStatement();
             String query = "UPDATE user(username, pwd, status) SET ('" + user.getUsername() + "', '" + user.getPassword() + "', '" + user.getStatus() + "')";
-            stmt.executeUpdate(query);
+            PreparedStatement thomas  = conn.prepareStatement(query);
+            thomas.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     public boolean isValidUser(String username, String password) throws NoSuchAlgorithmException {
         // cryptage du mot de passe écrit par l'utilisateur
