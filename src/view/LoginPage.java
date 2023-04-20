@@ -80,7 +80,6 @@ public class LoginPage extends JFrame implements ActionListener{
 
             loginController.sendMessage("/testConnexion: " + username + " " + password);
 
-
             //  boolean userIsValid = loginController.getUserIsValid();
             Boolean userIsValid = loginController.getUserIsValidWithTimeout(2, TimeUnit.SECONDS);
             if (userIsValid == null) {
@@ -89,7 +88,7 @@ public class LoginPage extends JFrame implements ActionListener{
             } else {
                 if (username.isEmpty() || password.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "Veuillez saisir un nom d'utilisateur et un mot de passe.");
-                } else if (userIsValid) {//
+                } else if (userIsValid) {
                     loginController.setUsername(username);
                     loginController.setUserPassword(password);
                     JOptionPane.showMessageDialog(this, "Connexion sucess !");

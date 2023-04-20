@@ -15,7 +15,6 @@ public class LoginController extends BaseController implements Observer {
     // Attributs et méthodes spécifiques pour les pages d'authentification
     private LoginPage view;
     private BlockingQueue<Boolean> userValidityQueue = new LinkedBlockingQueue<>();
-    private Boolean userIsValid;
 
     public LoginController(Client model) {
         super(model);
@@ -33,7 +32,6 @@ public class LoginController extends BaseController implements Observer {
 
     public void setUsername(String username) {
         model.getUser().setUsername(username);
-
     }
 
     public void setUserPassword(String password) {
@@ -51,9 +49,6 @@ public class LoginController extends BaseController implements Observer {
         }
     }
 
-    public Boolean getUserIsValid() {
-        return userIsValid;
-    }
     public void setUserIsValid(Boolean bool) {
         userValidityQueue.offer(bool);
     }

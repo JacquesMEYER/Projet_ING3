@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 public class SignUP extends JFrame implements ActionListener, Observer {
 
@@ -62,16 +63,24 @@ public class SignUP extends JFrame implements ActionListener, Observer {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
 
+            signUpController.sendMessage("/testInscription: " + username + " " + password);
+
+            Boolean userIsCorrect = signUpController.getUserIsCorrect(2, TimeUnit.SECONDS);
+
             // Vérifier si les informations d'inscription sont valides
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Veuillez saisir un nom d'utilisateur et un mot de passe.");
             } else {
-                signUpController.sendMessage("/testInscription: "+username+" "+password);
-                JOptionPane.showMessageDialog(this, "Inscription réussie !");
+                if (userIsCorrect) {
+                    JOptionPane.showMessageDialog(this, "Inscription réussie !");
 
-                LoginController loginController = new LoginController(signUpController.getModel());
-                LoginPage view = new LoginPage(loginController);
-                loginController.setView(view);
+                    LoginController loginController = new LoginController(signUpController.getModel());
+                    LoginPage view = new LoginPage(loginController);
+                    loginController.setView(view);
+                }
+                else {
+                    JOptionPane.showMessageDialog(this, "Ce nom d'utilisateur ou ce mot de passe est déjà utilisé...");
+                }
             }
         }
         if (e.getSource() == loginButton){

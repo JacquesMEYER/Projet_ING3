@@ -1,6 +1,7 @@
 package server;
 
 import DAO.ConnectionDB;
+import DAO.MessageDAO;
 import DAO.UserDAO;
 import model.IPAddress;
 import view.pageAcceuil;
@@ -59,14 +60,14 @@ public class Server {
 
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(username)) {
-                handler.getWriter().println(userSender+" (private message from " + userSender + ") " + message);
+                handler.getWriter().println("(private message from " + userSender + ") " + message);
 
                 break;
             }
         }
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(userSender)) {
-                handler.getWriter().println(userSender+" (private message to " + username + ") " + message);
+                handler.getWriter().println("(private message to " + username + ") " + message);
                 break;
             }
         }
@@ -75,9 +76,8 @@ public class Server {
     public static void broadcastMessage(String message) {
         for (ClientHandler handler : clientHandlers) {
             if (bannedUser.contains(handler.getUsername())) {
-                handler.getWriter().println("* pas de message pour toi, t'es banni!!!!! *");
-            }
-            else {
+                handler.getWriter().println("pas de message pour toi, t'es banni!!!!!");
+            } else {
                 handler.getWriter().println(message);
             }
         }
@@ -104,7 +104,7 @@ public class Server {
     public static void sendMessageTBanned(String username) {
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(username)) {
-                handler.getWriter().println("* pas de message pour toi, t'es banni *");
+                handler.getWriter().println("pas de message pour toi, t'es banni");
             }
         }
     }
@@ -182,13 +182,26 @@ public class Server {
     }
 
     public static void inscription(String username, String password) {
+        boolean isCorrect = false;
         // utilisation du UserDAO
         try {
             Connection conn = ConnectionDB.getConnection();
             UserDAO userDao = new UserDAO(conn);
+            isCorrect = userDao.isCorrectUser(username, password);
 
-            userDao.addUser(username, password);
+            if(isCorrect) {
+                for (ClientHandler handler : clientHandlers) {
+                        handler.getWriter().println("The user doesn't exist");
+                        userDao.addUser(username, password);
+                        break;
+                }
 
+            } else {
+                for (ClientHandler handler : clientHandlers) {
+                    handler.getWriter().println("The user already exist");
+                    break;
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (NoSuchAlgorithmException e) {

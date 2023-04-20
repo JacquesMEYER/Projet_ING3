@@ -30,7 +30,10 @@ public class pageAcceuil extends JFrame implements ActionListener {
     Vector<JButton> userButtons;
     //static Set<String> nomsCo = new HashSet<>(Arrays.asList("jac","rom","alix","ethan"));
 
-    Color bleuclair = new Color(214, 234, 248);
+    Color bleuclair = new Color(234, 242, 248);
+    Color bleufonce2 = new Color(31, 97, 141);
+    HTMLEditorKit editorKit;
+    HTMLDocument doc;
     static HTMLEditorKit editorKit;
     static HTMLDocument doc;
 
@@ -70,7 +73,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         this.messageController = messageController;
         // Création de la fenêtre principale
         setTitle("Messagerie Instantanée");
-        setSize(600, 400);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Création du panneau principal
@@ -80,16 +83,36 @@ public class pageAcceuil extends JFrame implements ActionListener {
         // Création du panneau de gauche pour la liste des utilisateurs et la barre de recherche
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
-        JLabel userListLabel = new JLabel("Utilisateurs");
-        leftPanel.add(userListLabel, BorderLayout.NORTH);
 
+
+        //Bouton profil
+        JButton profilButton = new JButton("\ud83d\udc64");
+        profilButton.setBackground(bleufonce2);
+        profilButton.setForeground(bleuclair);
+        leftPanel.add(profilButton, BorderLayout.NORTH);
+        profilButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame f = new ProfilWindow();
+                f.setVisible(true);
+            }
+        });
+
+        JPanel listPanel= new JPanel();
+        listPanel.setLayout(new BorderLayout());
+        JLabel userListLabel = new JLabel("         User List       ");
+        listPanel.add(userListLabel, BorderLayout.NORTH);
         userButtonsPanel = new JPanel();
         userButtonsPanel.setLayout(new BoxLayout(userButtonsPanel, BoxLayout.Y_AXIS));
         userButtons = new Vector<>();
+        JScrollPane userButtonScrollPane = new JScrollPane(userButtonsPanel);
+
+
 
 
         for (String nom : nomsCo) {
             JButton userButton = new JButton(nom);
+
             userButtons.add(userButton); //ajout au vecteur
             userButtonsPanel.add(userButton);// ajout du vecteur au left pannel
             userButton.addActionListener(new ActionListener() {
@@ -101,7 +124,35 @@ public class pageAcceuil extends JFrame implements ActionListener {
                 }
             });
         }
-        leftPanel.add(userButtonsPanel, BorderLayout.CENTER);
+        listPanel.add(userButtonScrollPane, BorderLayout.CENTER);
+
+        //creation de la barre de recherche
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new BorderLayout());
+        JTextField searchField = new JTextField();
+        searchPanel.add(searchField, BorderLayout.CENTER);
+        JButton searchButton = new JButton("\uD83D\uDD0E");
+        searchPanel.add(searchButton, BorderLayout.EAST);
+
+        //definir la focntion qui permet de rechercher un utilisateur
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String searchTerm = searchField.getText().toLowerCase(); //obtenir le texte de recherche saisi et le convertir en minuscules pour une correspondance insensible à la casse
+                for (JButton userButton : userButtons) { //parcourir tous les boutons d'utilisateur
+                    String buttonText = userButton.getText().toLowerCase(); //obtenir le texte du bouton et le convertir en minuscules pour une correspondance insensible à la casse
+                    if (buttonText.contains(searchTerm)) { //vérifier si le terme de recherche est contenu dans le texte du bouton
+                        userButton.setVisible(true); //afficher le bouton utilisateur correspondant
+                    } else {
+                        userButton.setVisible(false); //masquer les boutons utilisateur qui ne correspondent pas
+                    }
+                }            }
+        });
+
+
+
+        listPanel.add(searchPanel, BorderLayout.SOUTH);
+        leftPanel.add(listPanel, BorderLayout.CENTER);
         mainPanel.add(leftPanel, BorderLayout.WEST);
 
 
@@ -139,12 +190,15 @@ public class pageAcceuil extends JFrame implements ActionListener {
         });
 
         bottomPanel.add(messageField, BorderLayout.CENTER);
-        sendButton = new JButton("Envoyer");
+        sendButton = new JButton("\u27a4");
+        sendButton.setForeground(Color.WHITE);
+        sendButton.setBackground(new Color(18, 91, 218, 255));
 
         // Création d'un JPanel pour afficher le type d'utilisateur
         JPanel userTypePanel = new JPanel();
         userTypePanel.setLayout(new BorderLayout());
         userTypeLabel = new JLabel("(" + messageController.getModel().getUser().getUserType()+")");
+        userTypePanel.add(userTypeLabel, BorderLayout.NORTH);
 
 
         userTypePanel.add(userTypeLabel, BorderLayout.NORTH);
@@ -286,7 +340,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         });
         timer.start();
     }
-    public void updateUserTypeLabel() {
+    public void updateUserTypeLabel() {//lulkvjh
         userTypeLabel.setText("(" + messageController.getModel().getUser().getUserType() + ")");
     }
 
@@ -298,13 +352,13 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
     public void sendMessageRight(String mess) {
         String currentTime = getCurrentTime();
-        String rightStyle = "<div style='text-align: right; background-color: #85C1E9; color:white; max-width: 50px; padding: 5px 10px; border:2px black solid; margin-left:250px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white;display: inline-flex; '>%s</span></div><br>";
+        String rightStyle = "<div style='text-align: right; background-color: #85C1E9; color:white; max-width: 50px; padding: 5px 10px; border:0px black solid; margin-left:350px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white;display: inline-flex; '>%s</span></div><br>";
         appendMessage(mess, currentTime, rightStyle);
     }
     //    background-size: 10px; display: inline-block;
     public void sendMessageLeft(String mess) {
         String currentTime = getCurrentTime();
-        String leftStyle = "<div style=' text-align: left; background-color: #3498DB; color:white; max-width: 50px; padding: 5px 10px; border:2px black solid; margin-right:250px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white; display: inline-flex;'>%s</span></div>";
+        String leftStyle = "<div style=' text-align: left; background-color: #3498DB; color:white; max-width: 50px; padding: 5px 10px; border:0px black solid; margin-right:350px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white; display: inline-flex;'>%s</span></div>";
 
         appendMessage(mess, currentTime, leftStyle);
     }
