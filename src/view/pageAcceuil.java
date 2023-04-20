@@ -50,12 +50,15 @@ public class pageAcceuil extends JFrame implements ActionListener {
             userButtons.add(userButton);
 
             userButtonsPanel.add(userButton);
+
             userButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    parametter parametter = new parametter(userButton.getText(), messageController);
-                    parametter.setVisible(true);
-                }
+
+                        parametter parametter = new parametter(userButton.getText(), messageController);
+                        parametter.setVisible(true);
+                    }
+
             });
         }
         }
@@ -68,7 +71,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         this.messageController = messageController;
         // Création de la fenêtre principale
         setTitle("Messagerie Instantanée");
-        setSize(600, 400);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Création du panneau principal
@@ -276,13 +279,13 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
     public void sendMessageRight(String mess) {
         String currentTime = getCurrentTime();
-        String rightStyle = "<div style='text-align: right; background-color: #85C1E9; color:white; max-width: 50px; padding: 5px 10px; border:2px black solid; margin-left:250px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white;display: inline-flex; '>%s</span></div><br>";
+        String rightStyle = "<div style='text-align: right; background-color: #85C1E9; color:white; max-width: 50px; padding: 5px 10px; border:0px black solid; margin-left:350px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white;display: inline-flex; '>%s</span></div><br>";
         appendMessage(mess, currentTime, rightStyle);
     }
     //    background-size: 10px; display: inline-block;
     public void sendMessageLeft(String mess) {
         String currentTime = getCurrentTime();
-        String leftStyle = "<div style=' text-align: left; background-color: #3498DB; color:white; max-width: 50px; padding: 5px 10px; border:2px black solid; margin-right:250px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white; display: inline-flex;'>%s</span></div>";
+        String leftStyle = "<div style=' text-align: left; background-color: #3498DB; color:white; max-width: 50px; padding: 5px 10px; border:0px black solid; margin-right:350px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white; display: inline-flex;'>%s</span></div>";
 
         appendMessage(mess, currentTime, leftStyle);
     }

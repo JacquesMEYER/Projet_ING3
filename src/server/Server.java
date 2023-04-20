@@ -206,4 +206,16 @@ public class Server {
             throw new RuntimeException(e);
         }
     }
+
+    public static void changeType(String targetUsername, String type, String userSender) {
+
+        for (ClientHandler handler : clientHandlers) {
+            if (handler.getUsername().equalsIgnoreCase(targetUsername)) {
+                broadcastMessage("* "+ userSender+" set "+targetUsername+" to "+type+" *" );
+                handler.getWriter().println("/changeType:" + type);
+                break;
+            }
+        }
+    }
+
 }
