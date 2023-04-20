@@ -13,6 +13,10 @@ import static model.Utilisateur.UserType.MODERATOR;
 public class parametter extends JFrame implements ActionListener {
     JButton ban, unban, user_type, setClassicButton, setAdminButton, setModeratorButton;
     int userType = 1;
+    Color bleuclair = new Color(234, 242, 248);
+    Color bleufonce1 = new Color(36, 113, 163);
+    Color bleufonce2 = new Color(31, 97, 141);
+    Color bleufonce3 = new Color(23, 32, 42);
     JPanel userTypeButtonsPanel, cards;
     private MessageController messageController;
 
@@ -23,17 +27,21 @@ public class parametter extends JFrame implements ActionListener {
         this.messageController = messageController;
         this.nom = nom;
         JPanel parpan = new JPanel(new GridLayout(0, 1)); // Changez le layout en GridLayout avec un nombre variable de lignes
+        parpan.setPreferredSize(new Dimension(200, 300));
         ban = new JButton("Ban");
         ban.addActionListener(this);
-        ban.setBackground(Color.PINK);
+        ban.setBackground(bleufonce1);
+        ban.setForeground(bleuclair);
 
         unban = new JButton("UnBan");
         unban.addActionListener(this);
-        unban.setBackground(Color.PINK);
+        unban.setBackground(bleufonce1);
+        unban.setForeground(bleuclair);
 
         user_type = new JButton("user-type");
         user_type.addActionListener(this);
-        user_type.setBackground(Color.PINK);
+        user_type.setBackground(bleufonce1);
+        user_type.setForeground(bleuclair);
 
         parpan.add(ban);
         parpan.add(unban);
@@ -41,24 +49,31 @@ public class parametter extends JFrame implements ActionListener {
 
         // Créez un nouveau JPanel pour les boutons de type d'utilisateur
         userTypeButtonsPanel = new JPanel(new GridLayout(3, 1));
+        //userTypeButtonsPanel.setPreferredSize(new Dimension(300, 300));
 
         setAdminButton = new JButton("Set Admin");
         setAdminButton.addActionListener(this);
         userTypeButtonsPanel.add(setAdminButton);
+        setAdminButton.setBackground(bleufonce2);
+        setAdminButton.setForeground(bleuclair);
 
         setModeratorButton = new JButton("Set Moderator");
         setModeratorButton.addActionListener(this);
         userTypeButtonsPanel.add(setModeratorButton);
+        setModeratorButton.setBackground(bleufonce2);
+        setModeratorButton.setForeground(bleuclair);
 
         setClassicButton = new JButton("Set Classic");
         setClassicButton.addActionListener(this);
         userTypeButtonsPanel.add(setClassicButton);
+        setClassicButton.setBackground(bleufonce2);
+        setClassicButton.setForeground(bleuclair);
 
         // Créez un JPanel avec un CardLayout pour gérer l'affichage des boutons de type d'utilisateur
         cards = new JPanel(new CardLayout());
         cards.add(new JPanel(), "empty");
         cards.add(userTypeButtonsPanel, "userTypeButtons");
-
+       // cards.setSize(200, 100);
         parpan.add(cards); // Ajoutez le JPanel cards à parpan
 
         // Définir la couleur d'arrière-plan de la fenêtre et du JPanel
