@@ -180,6 +180,8 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
         // Création d'un bouton permettant d'envoyer un GIF
         JButton showGifButton = new JButton("GIF");
+        showGifButton.setBackground(bleufonce2);
+        showGifButton.setForeground(bleuclair);
         bottomPanel.add(showGifButton, BorderLayout.WEST);
 
         showGifButton.addActionListener(new ActionListener() {
