@@ -46,7 +46,6 @@ public class LoginController extends BaseController implements Observer {
         if (message.startsWith("The user has an account")) {
             Utilisateur.UserType type = Utilisateur.UserType.valueOf(message.substring(23)); // index du fin de la chaine "The user has an account"
             model.getUser().setUserType(type);
-            System.out.println(model.getUser().getUserType());
             setUserIsValid(true);
         } else if (message.equals("The user has no account")) {
             setUserIsValid(false);

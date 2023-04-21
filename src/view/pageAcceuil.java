@@ -314,6 +314,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
     }
     public void updateUserTypeLabel() {
         userTypeLabel.setText("(" + messageController.getModel().getUser().getUserType() + ")");
+        System.out.println(messageController.getModel().getUser().getUserType());
     }
 
 

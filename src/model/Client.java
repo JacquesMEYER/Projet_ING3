@@ -13,8 +13,7 @@ import java.util.Observer;
 
 public class Client extends Observable {
     private Utilisateur user = new Utilisateur("unknown", "unknown");
-    private static final String SERVER_IP = "172.20.10.3";
-            //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
     private static final int SERVER_PORT = 9999;
 
     private PrintWriter out;

@@ -1,6 +1,7 @@
 package controller;
 
 import model.Client;
+import model.Utilisateur;
 import view.pageAcceuil;
 
 import java.util.*;
@@ -31,25 +32,7 @@ public class MessageController extends BaseController {
     }
 
 
-    public void changeType(String type) {
-        if(Objects.equals(type, "classic")){
-            model.getUser().setUserType(CLASSIC);
-        }
-        if(Objects.equals(type, "admin")){
-            model.getUser().setUserType(ADMINISTRATOR);
-        }
-        if(Objects.equals(type, "moderator")){
-            model.getUser().setUserType(MODERATOR);
-        }
-        view.repaint();
-        view.updateUserTypeLabel(); // Ajoutez cette ligne pour mettre à jour le label
-        System.out.println(model.getUser().getUserType());
-
-    }
-
-
-
-        public Set<String> getNomsCo() {
+    public Set<String> getNomsCo() {
         return nomsCo;
     }
 
@@ -60,7 +43,6 @@ public class MessageController extends BaseController {
     @Override
     public void update(Observable o, Object arg) {
         String message = (String) arg;
-        System.out.println(message);
 
         if (message.startsWith("co:")) {
             String[] noms = message.substring("co:".length()).split(" ");
@@ -86,8 +68,10 @@ public class MessageController extends BaseController {
         } else if (message.startsWith("/changeType:")) {
             String[] parts = message.split(" ", 2);
             String type = parts[0].substring("/changeType:".length());
+            getModel().getUser().setUserType(Enum.valueOf(Utilisateur.UserType.class, type));
 
-            changeType(type);
+            view.repaint();
+            view.updateUserTypeLabel(); // Ajoutez cette ligne pour mettre à jour le label
         }
         else {
             if (message.startsWith(model.getUser().getUsername())) {

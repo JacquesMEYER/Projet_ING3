@@ -17,12 +17,15 @@ import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+
+import static model.Utilisateur.UserType.*;
 
 public class Server {
 
     private static final int SERVER_PORT = 9999;
-    private static final String SERVER_IP =IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -213,13 +216,29 @@ public class Server {
     }
 
     public static void changeType(String targetUsername, String type, String userSender) {
+        if(Objects.equals(type, "classic")){
+            type = String.valueOf(CLASSIC);
+        }
+        if(Objects.equals(type, "admin")){
+            type = String.valueOf(ADMINISTRATOR);
+        }
+        if(Objects.equals(type, "moderator")){
+            type = String.valueOf(MODERATOR);
+        }
+        try {
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDao = new UserDAO(conn);
+            userDao.updateUserTypeByUsername(targetUsername, type);
 
-        for (ClientHandler handler : clientHandlers) {
-            if (handler.getUsername().equalsIgnoreCase(targetUsername)) {
-                broadcastMessage("* "+ userSender+" set "+targetUsername+" to "+type+" *" );
-                handler.getWriter().println("/changeType:" + type);
-                break;
+            for (ClientHandler handler : clientHandlers) {
+                if (handler.getUsername().equalsIgnoreCase(targetUsername)) {
+                    broadcastMessage("* " + userSender + " set " + targetUsername + " to " + type + " *");
+                    handler.getWriter().println("/changeType:" + type);
+                    break;
+                }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
     public static void displayGif(String gif, String userSender){

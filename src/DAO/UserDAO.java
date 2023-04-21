@@ -13,6 +13,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.List;
+import java.util.Objects;
+
+import static model.Utilisateur.UserType.*;
 
 public class UserDAO implements DAO<Utilisateur> {
     private Connection conn;
@@ -44,6 +47,19 @@ public class UserDAO implements DAO<Utilisateur> {
 
     public List<Utilisateur> getAllUsers() {
         return null;
+    }
+
+    public void updateUserTypeByUsername(String name, String type) {
+        //code pour mettre à jour le type de l'utilisateur
+
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "UPDATE user SET type = '" + Enum.valueOf(Utilisateur.UserType.class, type) + "' WHERE username = '" + name + "'";
+            stmt.executeUpdate(query);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int nbUsers() {
