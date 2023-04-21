@@ -2,6 +2,13 @@ package DAO;
 
 import model.Utilisateur;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.AlgorithmParameters;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -103,7 +110,7 @@ public class UserDAO implements DAO<Utilisateur> {
         }
     }
 
-    public void updateUser(Utilisateur user) {
+    /*public void updateUser(Utilisateur user) {
         //code pour mettre à jour un utilisateur
         try {
             Statement stmt = this.conn.createStatement();
@@ -112,7 +119,7 @@ public class UserDAO implements DAO<Utilisateur> {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     public boolean isValidUser(String username, String password) throws NoSuchAlgorithmException {
         // cryptage du mot de passe écrit par l'utilisateur
@@ -125,6 +132,7 @@ public class UserDAO implements DAO<Utilisateur> {
 
             if(rs.next()) {
                 String correctHashedPwd = rs.getString("pwd");
+                System.out.println(correctHashedPwd);
 
                 if(correctHashedPwd.equals(hashedPwd)) {
                     return true;

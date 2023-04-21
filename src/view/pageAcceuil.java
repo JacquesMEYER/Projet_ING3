@@ -2,7 +2,11 @@ package view;
 
 import controller.MessageController;
 
+import javax.swing.Timer;
 import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -96,7 +100,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
             }
         });
 
-        JPanel listPanel= new JPanel();
+        JPanel listPanel = new JPanel();
         listPanel.setLayout(new BorderLayout());
         JLabel userListLabel = new JLabel("         User List       ");
         listPanel.add(userListLabel, BorderLayout.NORTH);
@@ -104,8 +108,6 @@ public class pageAcceuil extends JFrame implements ActionListener {
         userButtonsPanel.setLayout(new BoxLayout(userButtonsPanel, BoxLayout.Y_AXIS));
         userButtons = new Vector<>();
         JScrollPane userButtonScrollPane = new JScrollPane(userButtonsPanel);
-
-
 
 
         for (String nom : nomsCo) {
@@ -144,7 +146,8 @@ public class pageAcceuil extends JFrame implements ActionListener {
                     } else {
                         userButton.setVisible(false); //masquer les boutons utilisateur qui ne correspondent pas
                     }
-                }            }
+                }
+            }
         });
 
 
@@ -174,6 +177,19 @@ public class pageAcceuil extends JFrame implements ActionListener {
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         messageField = new JTextField();
+
+        // Création d'un bouton permettant d'envoyer un GIF
+        JButton showGifButton = new JButton("GIF");
+        bottomPanel.add(showGifButton, BorderLayout.WEST);
+
+        showGifButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GifButtons gifButtons = new GifButtons(messageController);
+                gifButtons.setVisible(true);
+            }
+        });
+
         bottomPanel.add(messageField, BorderLayout.CENTER);
         sendButton = new JButton("\u27a4");
         sendButton.setForeground(Color.WHITE);
@@ -182,7 +198,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         // Création d'un JPanel pour afficher le type d'utilisateur
         JPanel userTypePanel = new JPanel();
         userTypePanel.setLayout(new BorderLayout());
-        userTypeLabel = new JLabel("(" + messageController.getModel().getUser().getUserType()+")");
+        userTypeLabel = new JLabel("(" + messageController.getModel().getUser().getUserType() + ")");
         userTypePanel.add(userTypeLabel, BorderLayout.NORTH);
 
         userTypePanel.add(userTypeLabel, BorderLayout.NORTH);
@@ -243,10 +259,33 @@ public class pageAcceuil extends JFrame implements ActionListener {
         messageField.setText("");
     }
 
+    public void addGif(String urlMessage, boolean isLeft) {
+        System.out.println("TEST");
+        String gifUrl = "";
+        if (Objects.equals(urlMessage, "GIFhappy")) {
+            gifUrl = "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif";
+        } else if (Objects.equals(urlMessage, "GIFsurprised")) {
+            gifUrl = "https://media.giphy.com/media/l3q2K5jinAlChoCLS/giphy.gif";
+        } else if (Objects.equals(urlMessage, "GIFangry")) {
+            gifUrl = "https://media.giphy.com/media/3t7RAFhu75Wwg/giphy.gif";
+        } else if (Objects.equals(urlMessage, "GIFsad")) {
+            gifUrl = "https://media.giphy.com/media/d2lcHJTG5Tscg/giphy.gif";
+        }
+
+        String currentTime = getCurrentTime();
+        String align = isLeft ? "left" : "right";
+        String style = String.format("<div style='text-align: %s; max-width: 100%%; margin-bottom: 5px;'><img src='%s' width='300' height='200'><br><span style='font-size: 0.8em; color: white;display: inline-flex;'>%s</span></div>", align, gifUrl, currentTime);
+        try {
+            editorKit.insertHTML(doc, doc.getLength(), style, 0, 0, null);
+            chatArea.setCaretPosition(chatArea.getDocument().getLength());
+        } catch (BadLocationException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void addMessage(String message) {
         //chatArea.append(message + "\n");
-
-        sendMessageLeft(message+ "\n");
+        sendMessageLeft(message + "\n");
     }
 
     public void setNomsCo(Set<String> nomsCo) {
@@ -278,7 +317,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
     }
 
 
-    public String getCurrentTime() {
+    public static String getCurrentTime() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return LocalTime.now().format(formatter);
     }
@@ -288,6 +327,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         String rightStyle = "<div style='text-align: right; background-color: #85C1E9; color:white; max-width: 50px; padding: 5px 10px; border:0px black solid; margin-left:350px; margin-bottom: 5px;'>%s<br><span style='font-size: 0.8em; color: white;display: inline-flex; '>%s</span></div><br>";
         appendMessage(mess, currentTime, rightStyle);
     }
+
     //    background-size: 10px; display: inline-block;
     public void sendMessageLeft(String mess) {
         String currentTime = getCurrentTime();

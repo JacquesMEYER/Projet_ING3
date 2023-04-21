@@ -116,7 +116,7 @@ public class parametter extends JFrame implements ActionListener {
             }
         }
 
-        if (e.getSource() == user_type) {
+        if (e.getSource() == user_type) { // Juste le 1 à le droit de faire ça non ?
             if (userType == 1 ||userType == 2 ) {
                 CardLayout cl = (CardLayout) cards.getLayout();
                 cl.next(cards);
@@ -128,7 +128,7 @@ public class parametter extends JFrame implements ActionListener {
         if (e.getSource() == setClassicButton) {
 
             if (userType == 1 ||userType == 2 ) {
-            messageController.sendMessage("/setUserType: " + messageController.getModel().getUser().getUsername() + " classic");
+            messageController.sendMessage("/setUserType: " + nom + " classic");
             dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "YOU CANNOT!");
@@ -137,7 +137,7 @@ public class parametter extends JFrame implements ActionListener {
 
         if (e.getSource() == setAdminButton) {
             if (userType == 1 ) {
-            messageController.sendMessage("/setUserType: " + messageController.getModel().getUser().getUsername() + " admin");
+            messageController.sendMessage("/setUserType: " + nom + " admin");
             dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "YOU CANNOT!");
@@ -146,7 +146,7 @@ public class parametter extends JFrame implements ActionListener {
 
         if (e.getSource() == setModeratorButton) {
             if (userType == 1  ||userType == 2) {
-            messageController.sendMessage("/setUserType: " + messageController.getModel().getUser().getUsername() + " moderator");
+            messageController.sendMessage("/setUserType: " + nom + " moderator");
             dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "YOU CANNOT!");

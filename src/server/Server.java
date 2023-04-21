@@ -5,6 +5,7 @@ import DAO.MessageDAO;
 import DAO.UserDAO;
 import model.IPAddress;
 import model.Utilisateur;
+import view.pageAcceuil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -221,5 +222,8 @@ public class Server {
             }
         }
     }
-
+    public static void displayGif(String gif, String userSender){
+        broadcastMessage("/GIF: " + gif + " " + userSender);
+        //System.out.println("test broadvast gif");
+    }
 }
