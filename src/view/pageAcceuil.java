@@ -272,6 +272,18 @@ public class pageAcceuil extends JFrame implements ActionListener {
             gifUrl = "https://media.giphy.com/media/3t7RAFhu75Wwg/giphy.gif";
         } else if (Objects.equals(urlMessage, "GIFsad")) {
             gifUrl = "https://media.giphy.com/media/d2lcHJTG5Tscg/giphy.gif";
+        }else if (Objects.equals(urlMessage, "GIFsexy")) {
+            gifUrl = "https://media.giphy.com/media/6FRPH1GmsGFnq/giphy.gif";
+        }else if (Objects.equals(urlMessage, "GIFdisgusted")) {
+            gifUrl = "https://media.giphy.com/media/1g5iQKjDHYpc4/giphy.gif";
+        }else if (Objects.equals(urlMessage, "GIFbored")) {
+            gifUrl = "https://media.giphy.com/media/hTNw2kjNMiJ02uiuq5/giphy.gif";
+        }else if (Objects.equals(urlMessage, "GIFfunny")) {
+            gifUrl = "https://media.giphy.com/media/1rM1x5cwSbsMX4Qdj0/giphy-downsized-large.gif";
+        }else if (Objects.equals(urlMessage, "GIFhyped")) {
+            gifUrl = "https://media.giphy.com/media/o75ajIFH0QnQC3nCeD/giphy.gif";
+        }else if (Objects.equals(urlMessage, "GIFsaussage")) {
+            gifUrl = "https://media.giphy.com/media/OBgq0TugXsn7y/giphy.gif";
         }
 
         String currentTime = getCurrentTime();

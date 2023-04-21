@@ -20,23 +20,50 @@ public class GifButtons extends JDialog {
         JButton happyButton = new JButton("Happy");
         happyButton.setBackground(bleufonce2);
         happyButton.setForeground(bleuclair);
-
         JButton surprisedButton = new JButton("Surprised");
         surprisedButton.setBackground(bleufonce2);
         surprisedButton.setForeground(bleuclair);
-
         JButton angryButton = new JButton("Angry");
         angryButton.setBackground(bleufonce2);
         angryButton.setForeground(bleuclair);
-
         JButton sadButton = new JButton("Sad");
         sadButton.setBackground(bleufonce2);
         sadButton.setForeground(bleuclair);
+        JButton sexyButton = new JButton("Sexy");
+        sexyButton.setBackground(bleufonce2);
+        sexyButton.setForeground(bleuclair);
+        JButton disgustedButton = new JButton("Disgusted");
+        disgustedButton.setBackground(bleufonce2);
+        disgustedButton.setForeground(bleuclair);
+        JButton boredButton = new JButton("Bored");
+        boredButton.setBackground(bleufonce2);
+        boredButton.setForeground(bleuclair);
+        JButton funnyButton = new JButton("Funny");
+        funnyButton.setBackground(bleufonce2);
+        funnyButton.setForeground(bleuclair);
+        JButton hypedButton = new JButton("Hyped");
+        hypedButton.setBackground(bleufonce2);
+        hypedButton.setForeground(bleuclair);
+        JButton saussageButton = new JButton("Saussage");
+        saussageButton.setBackground(bleufonce2);
+        saussageButton.setForeground(bleuclair);
+
+
 
         gifPannel.add(happyButton);
         gifPannel.add(surprisedButton);
         gifPannel.add(angryButton);
         gifPannel.add(sadButton);
+        gifPannel.add(sexyButton);
+        gifPannel.add(disgustedButton);
+        gifPannel.add(boredButton);
+        gifPannel.add(funnyButton);
+        gifPannel.add(hypedButton);
+        gifPannel.add(saussageButton);
+
+
+
+
 
         getContentPane().add(gifPannel, BorderLayout.CENTER);
 
@@ -68,6 +95,48 @@ public class GifButtons extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 messageController.sendMessage("/GIF:GIFsad");
+                dispose();            }
+        });
+
+        sexyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                messageController.sendMessage("/GIF:GIFsexy");
+                dispose();            }
+        });
+
+        disgustedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                messageController.sendMessage("/GIF:GIFdisgusted");
+                dispose();            }
+        });
+
+        boredButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                messageController.sendMessage("/GIF:GIFbored");
+                dispose();            }
+        });
+
+        funnyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                messageController.sendMessage("/GIF:GIFfunny");
+                dispose();            }
+        });
+
+        hypedButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                messageController.sendMessage("/GIF:GIFhyped");
+                dispose();            }
+        });
+
+        saussageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                messageController.sendMessage("/GIF:GIFsaussage");
                 dispose();            }
         });
 

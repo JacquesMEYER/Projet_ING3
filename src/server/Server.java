@@ -25,8 +25,8 @@ import static model.Utilisateur.UserType.*;
 public class Server {
 
     private static final int SERVER_PORT = 9999;
-    private static final String SERVER_IP ="172.20.10.3";
-            //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    //private static final String SERVER_IP ="172.20.10.3";
+    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -35,6 +35,7 @@ public class Server {
 
     public static void main(String[] args) {
         System.out.println("Démarrage du serveur...");
+        System.out.println("( L'IP du server est: " + SERVER_IP + " )");
 
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT, 50, InetAddress.getByName(SERVER_IP))) {
             while (true) {
