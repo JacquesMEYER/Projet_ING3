@@ -8,3 +8,8 @@ faire commande :
 -pour debannir des gens                     (fais)
 -avoir notif quand qq se co a la conv
 
+!!! URGENT :
+    - Verifier si message null pour ne rien envoyer [x]
+6   - Vérifier la f(x) signUp []
+    - Revoir les private message []
+    - Faire toutes les vérifications pour les types de user []

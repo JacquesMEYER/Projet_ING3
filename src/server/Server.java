@@ -1,8 +1,11 @@
 package server;
 
 import DAO.ConnectionDB;
+import DAO.MessageDAO;
 import DAO.UserDAO;
+import model.IPAddress;
 import model.Utilisateur;
+import view.pageAcceuil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -216,13 +219,13 @@ public class Server {
     }
 
     public static void changeType(String targetUsername, String type, String userSender) {
-        if (Objects.equals(type, "classic")) {
+        if(Objects.equals(type, "classic")){
             type = String.valueOf(CLASSIC);
         }
-        if (Objects.equals(type, "admin")) {
+        if(Objects.equals(type, "admin")){
             type = String.valueOf(ADMINISTRATOR);
         }
-        if (Objects.equals(type, "moderator")) {
+        if(Objects.equals(type, "moderator")){
             type = String.valueOf(MODERATOR);
         }
         try {
