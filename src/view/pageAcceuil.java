@@ -16,13 +16,10 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import javax.swing.Timer;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
+
 
 public class pageAcceuil extends JFrame implements ActionListener {
-    private  MessageController messageController;
+    private static Set<String> nomsCo = new HashSet<>(Arrays.asList("-"));
     JEditorPane chatArea;
     JPanel userButtonsPanel;
     JTextField messageField;
@@ -35,41 +32,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
     Color bleufonce2 = new Color(31, 97, 141);
     HTMLEditorKit editorKit;
     HTMLDocument doc;
-
-    private static Set<String> nomsCo = new HashSet<>(Arrays.asList("-"));
-
-    public void updateUserButtons(Set<String> nomsCo, JPanel userButtonsPanel, Set<String> vrmtCo) {
-
-        userButtonsPanel.removeAll();
-        String nomV2 = "";
-        for (String nom : nomsCo) {
-            if (!Objects.equals(nom, "unknown")){
-                if (nom == messageController.getModel().getUser().getUsername()) {
-                    nomV2 = nom + " (me)";
-                } else nomV2 = nom;
-            JButton userButton = new JButton(nomV2);
-            if (vrmtCo.contains(nom)) {
-                userButton.setBackground(Color.GREEN);
-            } else userButton.setBackground(Color.PINK);
-            userButtons.add(userButton);
-
-            userButtonsPanel.add(userButton);
-
-            userButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-
-                        parametter parametter = new parametter(userButton.getText(), messageController);
-                        parametter.setVisible(true);
-                    }
-
-            });
-        }
-        }
-
-        userButtonsPanel.revalidate();
-        userButtonsPanel.repaint();
-    }
+    private MessageController messageController;
 
     public pageAcceuil(MessageController messageController) {
         this.messageController = messageController;
@@ -149,7 +112,6 @@ public class pageAcceuil extends JFrame implements ActionListener {
                 }
             }
         });
-
 
 
         listPanel.add(searchPanel, BorderLayout.SOUTH);
@@ -234,6 +196,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 sendMessage(messageField.getText());
 
             }
@@ -253,12 +216,52 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
     }
 
+    public static String getCurrentTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return LocalTime.now().format(formatter);
+    }
+
+    public void updateUserButtons(Set<String> nomsCo, JPanel userButtonsPanel, Set<String> vrmtCo) {
+
+        userButtonsPanel.removeAll();
+        String nomV2 = "";
+        for (String nom : nomsCo) {
+            if (!Objects.equals(nom, "unknown")) {
+                if (nom == messageController.getModel().getUser().getUsername()) {
+                    nomV2 = nom + " (me)";
+                } else nomV2 = nom;
+                JButton userButton = new JButton(nomV2);
+                if (vrmtCo.contains(nom)) {
+                    userButton.setBackground(Color.GREEN);
+                } else userButton.setBackground(Color.PINK);
+                userButtons.add(userButton);
+
+                userButtonsPanel.add(userButton);
+
+                userButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        parametter parametter = new parametter(userButton.getText(), messageController);
+                        parametter.setVisible(true);
+                    }
+
+                });
+            }
+        }
+
+        userButtonsPanel.revalidate();
+        userButtonsPanel.repaint();
+    }
+
     private void sendMessage(String mess) {
 
         String message = messageField.getText();
         //chatArea.append("Moi : " + mess + "\n");
-        messageController.sendMessage(message);
-        messageField.setText("");
+        if (!Objects.equals(message, "")){
+            messageController.sendMessage(message);
+            messageField.setText("");
+        }
     }
 
     public void addGif(String urlMessage, boolean isLeft) {
@@ -272,17 +275,17 @@ public class pageAcceuil extends JFrame implements ActionListener {
             gifUrl = "https://media.giphy.com/media/3t7RAFhu75Wwg/giphy.gif";
         } else if (Objects.equals(urlMessage, "GIFsad")) {
             gifUrl = "https://media.giphy.com/media/d2lcHJTG5Tscg/giphy.gif";
-        }else if (Objects.equals(urlMessage, "GIFsexy")) {
+        } else if (Objects.equals(urlMessage, "GIFsexy")) {
             gifUrl = "https://media.giphy.com/media/6FRPH1GmsGFnq/giphy.gif";
-        }else if (Objects.equals(urlMessage, "GIFdisgusted")) {
+        } else if (Objects.equals(urlMessage, "GIFdisgusted")) {
             gifUrl = "https://media.giphy.com/media/1g5iQKjDHYpc4/giphy.gif";
-        }else if (Objects.equals(urlMessage, "GIFbored")) {
+        } else if (Objects.equals(urlMessage, "GIFbored")) {
             gifUrl = "https://media.giphy.com/media/hTNw2kjNMiJ02uiuq5/giphy.gif";
-        }else if (Objects.equals(urlMessage, "GIFfunny")) {
+        } else if (Objects.equals(urlMessage, "GIFfunny")) {
             gifUrl = "https://media.giphy.com/media/1rM1x5cwSbsMX4Qdj0/giphy-downsized-large.gif";
-        }else if (Objects.equals(urlMessage, "GIFhyped")) {
+        } else if (Objects.equals(urlMessage, "GIFhyped")) {
             gifUrl = "https://media.giphy.com/media/o75ajIFH0QnQC3nCeD/giphy.gif";
-        }else if (Objects.equals(urlMessage, "GIFsaussage")) {
+        } else if (Objects.equals(urlMessage, "GIFsaussage")) {
             gifUrl = "https://media.giphy.com/media/OBgq0TugXsn7y/giphy.gif";
         }
 
@@ -311,7 +314,6 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
     }
 
-
     public JPanel getUserButtonsPanel() {
         return userButtonsPanel;
     }
@@ -326,15 +328,10 @@ public class pageAcceuil extends JFrame implements ActionListener {
         });
         timer.start();
     }
+
     public void updateUserTypeLabel() {
         userTypeLabel.setText("(" + messageController.getModel().getUser().getUserType() + ")");
         System.out.println(messageController.getModel().getUser().getUserType());
-    }
-
-
-    public static String getCurrentTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return LocalTime.now().format(formatter);
     }
 
     public void sendMessageRight(String mess) {

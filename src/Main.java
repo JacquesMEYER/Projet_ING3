@@ -16,7 +16,7 @@ public class Main {
 /*      //pour ne pas se Login
         MessageController messageController = new MessageController(model);
         pageAcceuil view2 = new pageAcceuil(messageController);
-        messageController.setView(view2);
+        messageController.se:tView(view2);
 */
 
     }

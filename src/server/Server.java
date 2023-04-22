@@ -26,8 +26,7 @@ public class Server {
 
     private static final int SERVER_PORT = 9999;
     //private static final String SERVER_IP ="172.20.10.3";
-    private static final String SERVER_IP = "172.20.10.3";
-            //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
