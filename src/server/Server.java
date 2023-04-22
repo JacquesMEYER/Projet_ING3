@@ -26,7 +26,8 @@ public class Server {
 
     private static final int SERVER_PORT = 9999;
     //private static final String SERVER_IP ="172.20.10.3";
-    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = "172.20.10.3";
+            //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -39,7 +40,6 @@ public class Server {
 
         try (ServerSocket serverSocket = new ServerSocket(SERVER_PORT, 50, InetAddress.getByName(SERVER_IP))) {
             while (true) {
-                bannedUser.add("test");
 
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("model.Client connecté : " + clientSocket.getInetAddress());
@@ -246,5 +246,20 @@ public class Server {
     public static void displayGif(String gif, String userSender){
         broadcastMessage("/GIF: " + gif + " " + userSender);
         //System.out.println("test broadvast gif");
+    }
+    public static void returnBannedUsers(String userSender) {
+        StringBuilder bannedUserNames= new StringBuilder();
+
+        for(String user: bannedUser){
+            bannedUserNames.append(user);
+        }
+        for (ClientHandler handler : clientHandlers) {
+            if (handler.getUsername().equalsIgnoreCase(userSender)) {
+                if(bannedUserNames.isEmpty()){
+                    handler.getWriter().println("* No banned Users yet *");
+                } else handler.getWriter().println("* Banned users are : " +bannedUserNames+" *");
+                break;
+            }
+        }
     }
 }

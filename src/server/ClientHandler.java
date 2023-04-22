@@ -79,13 +79,9 @@ class ClientHandler implements Runnable {
                         String mdp = parts[2];
                         Server.isValidUser(nom,mdp);
                     } else if (onlyTheMessage.startsWith("/GIF:")) {
-
                         String[] parts = onlyTheMessage.split(" ", 2);
                         String url = parts[0].substring("/GIF:".length());
                         Server.displayGif(url, userSender);
-                        //System.out.println("Test boucle ClientHandler");
-
-
                     } else if (onlyTheMessage.startsWith("/testInscription:")) {
                         String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
                         String nom = parts[1];
@@ -96,9 +92,9 @@ class ClientHandler implements Runnable {
                         String targetUsername = parts[1];
                         String type = parts[2];
                         Server.changeType(targetUsername, type, userSender);
-                    }
-
-                    else {
+                    }else if (onlyTheMessage.startsWith("/bannedUsers:")) {
+                        Server.returnBannedUsers(userSender);
+                    } else {
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }
                    Server.afficherQuiEstCo();

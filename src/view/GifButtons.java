@@ -141,7 +141,6 @@ public class GifButtons extends JDialog {
         });
 
 
-
         setLocationRelativeTo(null);
         setModal(true);
     }

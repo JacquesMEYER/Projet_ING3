@@ -11,8 +11,7 @@ import static model.Utilisateur.UserType.ADMINISTRATOR;
 import static model.Utilisateur.UserType.MODERATOR;
 
 public class parametter extends JFrame implements ActionListener {
-    JButton ban, unban, user_type, setClassicButton, setAdminButton, setModeratorButton;
-    int userType = 1;
+    JButton ban, unban,viewBannedUsers, user_type, setClassicButton, setAdminButton, setModeratorButton;
     Color bleuclair = new Color(234, 242, 248);
     Color bleufonce1 = new Color(36, 113, 163);
     Color bleufonce2 = new Color(31, 97, 141);
@@ -27,7 +26,8 @@ public class parametter extends JFrame implements ActionListener {
         this.messageController = messageController;
         this.nom = nom;
         JPanel parpan = new JPanel(new GridLayout(0, 1)); // Changez le layout en GridLayout avec un nombre variable de lignes
-        parpan.setPreferredSize(new Dimension(200, 300));
+       parpan.setPreferredSize(new Dimension(200, 300));
+
         ban = new JButton("Ban");
         ban.addActionListener(this);
         ban.setBackground(bleufonce1);
@@ -38,6 +38,11 @@ public class parametter extends JFrame implements ActionListener {
         unban.setBackground(bleufonce1);
         unban.setForeground(bleuclair);
 
+        viewBannedUsers = new JButton("viewBannedUsers");
+        viewBannedUsers.addActionListener(this);
+        viewBannedUsers.setBackground(bleufonce1);
+        viewBannedUsers.setForeground(bleuclair);
+
         user_type = new JButton("user-type");
         user_type.addActionListener(this);
         user_type.setBackground(bleufonce1);
@@ -45,6 +50,7 @@ public class parametter extends JFrame implements ActionListener {
 
         parpan.add(ban);
         parpan.add(unban);
+        parpan.add(viewBannedUsers);
         parpan.add(user_type);
 
         // Créez un nouveau JPanel pour les boutons de type d'utilisateur
@@ -89,7 +95,7 @@ public class parametter extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //userType=1;
+        int userType;
        if(messageController.getModel().getUser().getUserType()==ADMINISTRATOR){
            userType =1;
        }else if(messageController.getModel().getUser().getUserType()==MODERATOR){
@@ -112,6 +118,15 @@ public class parametter extends JFrame implements ActionListener {
                 dispose();
             } else {
                 messageController.sendMessage("/unBan:" + nom);
+                dispose();
+            }
+        }
+        if (e.getSource() == viewBannedUsers) {
+            if (userType == 3) {
+                JOptionPane.showMessageDialog(this, "YOU CANNOT!");
+                dispose();
+            } else {
+                messageController.sendMessage("/bannedUsers:");
                 dispose();
             }
         }
