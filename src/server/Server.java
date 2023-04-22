@@ -267,7 +267,7 @@ public class Server {
     }
 
     public static void changeProfil(String newUsername, String newPassword, String userSender) {
-        broadcastMessage("* " + userSender + " has changed his/her name to " + newUsername);
+        broadcastMessage("* " + userSender + " has changed his/her name to " + newUsername+" *");
 
         //APPELER DAO
         for (ClientHandler handler : clientHandlers) {

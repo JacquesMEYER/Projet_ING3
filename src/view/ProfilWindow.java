@@ -219,7 +219,7 @@ public class ProfilWindow extends JFrame {
 
             }
         });
-        saveButton.addActionListener(new ActionListener() {
+        saveButton.addActionListener(new ActionListener() {//er
             @Override
             public void actionPerformed(ActionEvent e) {
                 profilWindowController.sendMessage("/MAJProfil: "+nameField.getText()+" "+pwField.getText());
