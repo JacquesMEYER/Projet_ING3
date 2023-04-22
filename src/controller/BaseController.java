@@ -7,6 +7,9 @@ import java.util.Observer;
 
 public abstract class BaseController implements Observer {
     protected Client model;
+    public void sendMessage(String message) {
+        model.sendMessage(message);
+    }
 
     public BaseController(Client model) {
         this.model = model;
@@ -15,6 +18,7 @@ public abstract class BaseController implements Observer {
     public  Client getModel() {
         return model;
     }
+
     public void update(Observable o, Object arg) {}
 
 

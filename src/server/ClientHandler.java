@@ -94,6 +94,11 @@ class ClientHandler implements Runnable {
                         Server.changeType(targetUsername, type, userSender);
                     }else if (onlyTheMessage.startsWith("/bannedUsers:")) {
                         Server.returnBannedUsers(userSender);
+                    }else if (onlyTheMessage.startsWith("/MAJProfil")) {
+                        String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
+                        String newName = parts[1];
+                        String newMdp = parts[2];
+                        Server.changeProfil(newName,newMdp, userSender);
                     } else {
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }

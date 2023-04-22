@@ -19,9 +19,6 @@ public class SignUpController extends BaseController {
     public void setView(SignUP view) {
         this.view = view;
     }
-    public void sendMessage(String message) {
-        model.sendMessage(message);
-    }
 
     @Override
     public void update(Observable o, Object arg) {

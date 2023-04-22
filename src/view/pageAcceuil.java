@@ -1,6 +1,7 @@
 package view;
 
 import controller.MessageController;
+import controller.ProfilWindowController;
 
 import javax.swing.Timer;
 import javax.swing.*;
@@ -95,8 +96,11 @@ public class pageAcceuil extends JFrame implements ActionListener {
         profilButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame f = new ProfilWindow();
-                f.setVisible(true);
+
+                ProfilWindowController profilWindowController = new ProfilWindowController(messageController.getModel());
+                ProfilWindow view2 = new ProfilWindow(profilWindowController);
+                profilWindowController.setView(view2);
+                view2.setVisible(true);
             }
         });
 
@@ -260,6 +264,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         messageController.sendMessage(message);
         messageField.setText("");
     }
+
 
     public void addGif(String urlMessage, boolean isLeft) {
         System.out.println("TEST");

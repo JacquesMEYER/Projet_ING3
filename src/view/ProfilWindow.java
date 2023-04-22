@@ -3,6 +3,7 @@ package view;
 
 import controller.LoginController;
 import model.Client;
+import controller.ProfilWindowController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +28,7 @@ public class ProfilWindow extends JFrame {
 
 
 
-    public ProfilWindow() {
+    public ProfilWindow(ProfilWindowController profilWindowController ) {
         // Création de la fenêtre principale
         setTitle("Profil");
         setSize(600, 400);
@@ -70,8 +71,7 @@ public class ProfilWindow extends JFrame {
 
                 dispose();
                 //System.exit(0);
-                Client model = new Client(); //creer le client apres la page login sinon entered trop tot
-
+                Client model = new Client();
                 LoginController loginController = new LoginController(model);
                 LoginPage view = new LoginPage(loginController);
                 loginController.setView(view);
@@ -128,22 +128,23 @@ public class ProfilWindow extends JFrame {
 
         JLabel userNameLabel = new JLabel("Name : ");
         displayPanel.add(userNameLabel);
-        JTextField nameField = new JTextField("Romain");
+        JTextField nameField = new JTextField(profilWindowController.getModel().getUser().getUsername());
         displayPanel.add(nameField);
         nameField.setSize(200, 24);
-
-        JLabel userPseudoLabel = new JLabel("Pseudo : ");
-        displayPanel.add(userPseudoLabel);
-        JTextField pseudoField = new JTextField("roro_69");
-        displayPanel.add(pseudoField);
-        pseudoField.setSize(200, 24);
 
         JLabel userPWLabel = new JLabel("Password : ");
         userPWLabel.setBackground(Color.BLUE);
         displayPanel.add(userPWLabel);
-        JTextField pwField = new JTextField("roro1234");
+        JTextField pwField = new JTextField(profilWindowController.getModel().getUser().getPassword());
         displayPanel.add(pwField);
         pwField.setSize(200, 24);
+
+        JLabel typeLabel = new JLabel("User Type : ");
+        typeLabel.setBackground(Color.BLUE);
+        displayPanel.add(typeLabel);
+        JTextField typeField = new JTextField(profilWindowController.getModel().getUser().getUserType().name());
+        displayPanel.add(typeField);
+        typeField.setSize(200, 24);
 
         JLabel userStatusLabel = new JLabel("Status : ");
         displayPanel.add(userStatusLabel);
@@ -167,8 +168,8 @@ public class ProfilWindow extends JFrame {
 
 
 
-        JButton saveButton= new JButton("Save Changes \u2705");
-        // déclencher la fonction updateUser dans DAO
+        JButton saveButton= new JButton("Save Changes ✅");
+
         saveButton.setForeground(Color.WHITE);
         saveButton.setBackground(new Color(33, 141, 10));
 
@@ -218,6 +219,14 @@ public class ProfilWindow extends JFrame {
 
             }
         });
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                profilWindowController.sendMessage("/MAJProfil: "+nameField.getText()+" "+pwField.getText());
+                profilWindowController.getModel().getUser().setUsername(nameField.getText());
+                profilWindowController.getModel().getUser().setPassword(pwField.getText());
+            }
+        });
 
         parameterButton.addActionListener(new ActionListener() {
             @Override
@@ -256,10 +265,5 @@ public class ProfilWindow extends JFrame {
         return image;
     }
 
-
-    /*public static void main(String[] args) {
-        ProfilWindow window = new ProfilWindow();
-        window.setVisible(true);
-    }*/
 }
 

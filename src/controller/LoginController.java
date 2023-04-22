@@ -26,10 +26,8 @@ public class LoginController extends BaseController implements Observer {
         this.view = view;
     }
 
-    //possible de le mettre dans classe mere
-    public void sendMessage(String message) {
-        model.sendMessage(message);
-    }
+
+
 
     public void setUsername(String username) {
         model.getUser().setUsername(username);

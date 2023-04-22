@@ -8,8 +8,8 @@ public class Utilisateur {
     private Status status;
     private UserType userType;
 
-    Utilisateur(String pseudo,String mdp){
-        this.username=pseudo;
+    Utilisateur(String username,String mdp){
+        this.username=username;
         this.password=mdp; //test
         this.userType= Utilisateur.UserType.ADMINISTRATOR;
 

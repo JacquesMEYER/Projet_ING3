@@ -27,9 +27,7 @@ public class MessageController extends BaseController {
         this.view = view;
     }
 
-    public void sendMessage(String message) {
-        model.sendMessage(message);
-    }
+
 
 
     public Set<String> getNomsCo() {

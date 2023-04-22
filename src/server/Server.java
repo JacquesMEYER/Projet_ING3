@@ -1,11 +1,8 @@
 package server;
 
 import DAO.ConnectionDB;
-import DAO.MessageDAO;
 import DAO.UserDAO;
-import model.IPAddress;
 import model.Utilisateur;
-import view.pageAcceuil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,7 +12,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -26,8 +24,8 @@ public class Server {
 
     private static final int SERVER_PORT = 9999;
     //private static final String SERVER_IP ="172.20.10.3";
-    private static final String SERVER_IP = "172.20.10.3";
-            //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = "10.188.41.187";
+    //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -163,7 +161,7 @@ public class Server {
             isValid = userDao.isValidUser(username, password);
             type = userDao.getUserTypeByUsername(username);
 
-            if(isValid) {
+            if (isValid) {
                 for (ClientHandler handler : clientHandlers) {
                     if (handler.getUsername().equalsIgnoreCase("unknown")) {
                         handler.getWriter().println("The user has an account" + type);
@@ -197,11 +195,11 @@ public class Server {
             UserDAO userDao = new UserDAO(conn);
             isCorrect = userDao.isCorrectUser(username, password);
 
-            if(isCorrect) {
+            if (isCorrect) {
                 for (ClientHandler handler : clientHandlers) {
-                        handler.getWriter().println("The user doesn't exist");
-                        userDao.addUser(username, password);
-                        break;
+                    handler.getWriter().println("The user doesn't exist");
+                    userDao.addUser(username, password);
+                    break;
                 }
 
             } else {
@@ -218,13 +216,13 @@ public class Server {
     }
 
     public static void changeType(String targetUsername, String type, String userSender) {
-        if(Objects.equals(type, "classic")){
+        if (Objects.equals(type, "classic")) {
             type = String.valueOf(CLASSIC);
         }
-        if(Objects.equals(type, "admin")){
+        if (Objects.equals(type, "admin")) {
             type = String.valueOf(ADMINISTRATOR);
         }
-        if(Objects.equals(type, "moderator")){
+        if (Objects.equals(type, "moderator")) {
             type = String.valueOf(MODERATOR);
         }
         try {
@@ -243,23 +241,39 @@ public class Server {
             throw new RuntimeException(e);
         }
     }
-    public static void displayGif(String gif, String userSender){
+
+    public static void displayGif(String gif, String userSender) {
         broadcastMessage("/GIF: " + gif + " " + userSender);
         //System.out.println("test broadvast gif");
     }
-    public static void returnBannedUsers(String userSender) {
-        StringBuilder bannedUserNames= new StringBuilder();
 
-        for(String user: bannedUser){
+    public static void returnBannedUsers(String userSender) {
+        StringBuilder bannedUserNames = new StringBuilder();
+
+        for (String user : bannedUser) {
             bannedUserNames.append(user);
         }
         for (ClientHandler handler : clientHandlers) {
             if (handler.getUsername().equalsIgnoreCase(userSender)) {
-                if(bannedUserNames.isEmpty()){
+                if (bannedUserNames.isEmpty()) {
                     handler.getWriter().println("* No banned Users yet *");
-                } else handler.getWriter().println("* Banned users are : " +bannedUserNames+" *");
+                } else handler.getWriter().println("* Banned users are : " + bannedUserNames + " *");
                 break;
             }
         }
     }
+
+    public static void changeProfil(String newUsername, String newPassword, String userSender) {
+        broadcastMessage("* " + userSender + " has changed his/her name to " + newUsername);
+
+        //APPELER DAO
+        for (ClientHandler handler : clientHandlers) {
+            if (handler.getUsername().equalsIgnoreCase(userSender)) {
+                handler.setUsername(newUsername);
+                break;
+            }
+        }
+    }
+
+
 }
