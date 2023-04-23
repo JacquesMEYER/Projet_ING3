@@ -27,7 +27,7 @@ public class Server {
 
     private static final int SERVER_PORT = 9999;
     //private static final String SERVER_IP ="172.20.10.3";
-    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = "192.168.1.34"; //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -169,7 +169,7 @@ public class Server {
             //MessageDAO msgDAO = new MessageDAO(conn);
             isValid = userDao.isValidUser(username, password);
             type = userDao.getUserTypeByUsername(username);
-
+            System.out.println(type);
             //msg = msgDAO.getAllMessages();
 
             if (isValid) {
@@ -178,7 +178,8 @@ public class Server {
                         handler.getWriter().println("The user has an account" + type);
                         handler.setUsername(username);
                         broadcastMessage("* " + username + " has entered the chat *");
-                        userDao.setStatus(username, Utilisateur.Status.ONLINE);
+                        userDao.setStatus(username, String.valueOf(Utilisateur.Status.ONLINE));
+                        userDao.nbUsers();
                         break;
                     }
                 }
@@ -226,20 +227,20 @@ public class Server {
         }
     }
 
-    public static void changeType(String targetUsername, Utilisateur.UserType type, String userSender) {
+    public static void changeType(String targetUsername, String type, String userSender) {
         if(Objects.equals(type, "classic")){
-            type = Utilisateur.UserType.valueOf(String.valueOf(CLASSIC));
+            type = String.valueOf(CLASSIC);
         }
         if(Objects.equals(type, "admin")){
-            type = Utilisateur.UserType.valueOf(String.valueOf(ADMINISTRATOR));
+            type = String.valueOf(ADMINISTRATOR);
         }
         if(Objects.equals(type, "moderator")){
-            type = Utilisateur.UserType.valueOf(String.valueOf(MODERATOR));
+            type = String.valueOf(MODERATOR);
         }
         try {
             Connection conn = ConnectionDB.getConnection();
             UserDAO userDao = new UserDAO(conn);
-            userDao.updateUserTypeByUsername(targetUsername, String.valueOf(type));
+            userDao.updateUserTypeByUsername(targetUsername, type);
 
             for (ClientHandler handler : clientHandlers) {
                 if (handler.getUsername().equalsIgnoreCase(targetUsername)) {
