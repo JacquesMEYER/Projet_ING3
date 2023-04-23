@@ -169,6 +169,7 @@ public class Server {
             //MessageDAO msgDAO = new MessageDAO(conn);
             isValid = userDao.isValidUser(username, password);
             type = userDao.getUserTypeByUsername(username);
+
             //msg = msgDAO.getAllMessages();
 
             if (isValid) {
@@ -177,6 +178,7 @@ public class Server {
                         handler.getWriter().println("The user has an account" + type);
                         handler.setUsername(username);
                         broadcastMessage("* " + username + " has entered the chat *");
+                        userDao.setStatus(username, Utilisateur.Status.ONLINE);
                         break;
                     }
                 }
