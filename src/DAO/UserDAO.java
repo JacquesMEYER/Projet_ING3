@@ -2,20 +2,12 @@ package DAO;
 
 import model.Utilisateur;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.AlgorithmParameters;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.List;
-import java.util.Objects;
 
-import static model.Utilisateur.UserType.*;
+import static model.Utilisateur.Status.*;
 
 public class UserDAO implements DAO<Utilisateur> {
     private Connection conn;
@@ -47,6 +39,52 @@ public class UserDAO implements DAO<Utilisateur> {
 
     public List<Utilisateur> getAllUsers() {
         return null;
+    }
+
+    public void setOnline(Utilisateur user) {
+
+    }
+
+    public void setOffline(String name) {
+        Utilisateur.Status status = OFFLINE;
+
+        try {
+            Statement stmt = conn.createStatement();
+            String query = "UPDATE status = '" + status + "' SET user WHERE username = '" + name + "' ";
+            stmt.executeUpdate(query);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getListUserCo() {
+        String userCo = "", userDeco = "", userAway = "", listStatusUsers = "", nomCo = "", nomDeco = "", nomAway = "";
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT username, status FROM user");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String status = rs.getString("status");
+                String username = rs.getString("username");
+
+                if (status.equals(String.valueOf(ONLINE))) {
+                    userCo += username + " ";
+                } else if (status.equals(String.valueOf(OFFLINE))) {
+                    userDeco += username + " ";
+                } else if (status.equals(String.valueOf(AWAY))) {
+                    userAway += username + " ";
+                }
+            }
+
+            listStatusUsers = "/co: " + userCo + "usernameDeco: " + userDeco + "usernameAway: " + userAway;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(listStatusUsers);
+        return listStatusUsers;
+
     }
 
     public void updateUserTypeByUsername(String name, String type) {
@@ -116,7 +154,6 @@ public class UserDAO implements DAO<Utilisateur> {
     public void addUser(String username, String pwd) throws NoSuchAlgorithmException {
         //méthode pour ajouter un utilisateur dans la base de données
         try {
-            System.out.println("existe pas encore");
             Statement stmt = this.conn.createStatement();
             String query = "INSERT INTO user(username, pwd) VALUES('" + username + "', '" + hashPassword(pwd) + "')";
             stmt.executeUpdate(query);
@@ -148,7 +185,6 @@ public class UserDAO implements DAO<Utilisateur> {
 
             if(rs.next()) {
                 String correctHashedPwd = rs.getString("pwd");
-                System.out.println(correctHashedPwd);
 
                 if(correctHashedPwd.equals(hashedPwd)) {
                     return true;

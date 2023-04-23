@@ -3,16 +3,16 @@ package model;
 public class Utilisateur {
     private String username;
     private String password;
-    public enum Status {ONLINE,OFFLINE,AWAY,DEMARRED}
+    public enum Status {ONLINE,OFFLINE,AWAY}
     public enum UserType {CLASSIC,MODERATOR,ADMINISTRATOR}
     private Status status;
     private UserType userType;
+    private boolean isBan;
 
     Utilisateur(String username,String mdp){
         this.username=username;
         this.password=mdp; //test
-        this.userType= Utilisateur.UserType.ADMINISTRATOR;
-
+        this.isBan = false;
     }
     Utilisateur(String pseudo){
         this.username=pseudo;
@@ -30,7 +30,7 @@ public class Utilisateur {
         return username;
     }
 
-    public void changementStatut(Status status){
+    public void setStatut(Status status){
         this.status=status;
     }
 
@@ -48,5 +48,12 @@ public class Utilisateur {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setBan(boolean ban) {
+        this.isBan = ban;
+    }
+    public boolean getBan() {
+        return isBan;
     }
 }

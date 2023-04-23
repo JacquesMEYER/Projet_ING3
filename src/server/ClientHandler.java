@@ -91,7 +91,7 @@ class ClientHandler implements Runnable {
                         String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
                         String targetUsername = parts[1];
                         String type = parts[2];
-                        Server.changeType(targetUsername, type, userSender);
+                        Server.changeType(targetUsername,Enum.valueOf(Utilisateur.UserType.class, type), userSender);
                     }else if (onlyTheMessage.startsWith("/bannedUsers:")) {
                         Server.returnBannedUsers(userSender);
                     }else if (onlyTheMessage.startsWith("/MAJProfil")) {
@@ -116,7 +116,7 @@ class ClientHandler implements Runnable {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                System.err.println("Erreur lors de la fermeture dusocket client : " + e.getMessage());
+                System.err.println("Erreur lors de la fermeture du socket client : " + e.getMessage());
             }
         }
     }

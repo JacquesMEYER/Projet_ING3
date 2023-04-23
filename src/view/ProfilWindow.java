@@ -2,8 +2,9 @@ package view;
 
 
 import controller.LoginController;
-import model.Client;
+import controller.MessageController;
 import controller.ProfilWindowController;
+import model.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,6 +35,8 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Millisecond;
 
 
+import java.awt.event.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class ProfilWindow extends JFrame {
@@ -90,12 +93,34 @@ public class ProfilWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                dispose();
-                //System.exit(0);
-                Client model = new Client();
+                /*profilController.sendMessage("/testDeconnexion: ");
+
+                //  boolean userIsValid = loginController.getUserIsValid();
+                Boolean userIsValid = profilController.getUserIsValidWithTimeout(2, TimeUnit.SECONDS);
+
+                JOptionPane.showMessageDialog(this, "Veuillez saisir un nom d'utilisateur et un mot de passe.");
+
+                    } else if (userIsValid) {
+                        loginController.setUsername(username);
+                        loginController.setUserPassword(password);
+                        JOptionPane.showMessageDialog(this, "Connexion sucess !");
+                        MessageController messageController = new MessageController(loginController.getModel());
+                        pageAcceuil view2 = new pageAcceuil(messageController);
+                        messageController.setView(view2);
+                        dispose();
+                        view2.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Incorrect user or password.");
+                    }*/
+
+                /*dispose();
+                profilController.getModel().getUser();
+
+                Client model = new Client(); //creer le client apres la page login sinon entered trop tot
+
                 LoginController loginController = new LoginController(model);
                 LoginPage view = new LoginPage(loginController);
-                loginController.setView(view);
+                loginController.setView(view);*/
             }
         });
 
