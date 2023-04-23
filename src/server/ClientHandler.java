@@ -101,6 +101,10 @@ class ClientHandler implements Runnable {
                         String newName = parts[1];
                         String newMdp = parts[2];
                         Server.changeProfil(newName,newMdp, userSender);
+                    }else if (onlyTheMessage.startsWith("/ChangeStatus:online")) {
+                        Server.setStatus(username,"ONLINE");
+                    }else if (onlyTheMessage.startsWith("/ChangeStatus:away")) {
+                        Server.setStatus(username,"AWAY");
                     } else {
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }
@@ -112,7 +116,7 @@ class ClientHandler implements Runnable {
             System.err.println("Erreur lors de la réception du message : " + e.getMessage());
         } finally {
             Server.broadcastMessage("* " + username + " has left the chat *");
-            Server.setStatus(username);
+            Server.setStatus(username, "OFFLINE");
             Server.clientHandlers.remove(this);
             Server.afficherQuiEstCo(); //mettre a jour les boutons des autres
 

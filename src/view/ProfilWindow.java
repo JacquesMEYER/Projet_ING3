@@ -209,9 +209,6 @@ public class ProfilWindow extends JFrame {
         checkBoxGroup.add(onlineCheckbox);
         checkBoxGroup.add(awayCheckbox);
 
-
-
-
         //Boutons save et delete
         JPanel southButtonsPanel = new JPanel();
         southButtonsPanel.setLayout(new BorderLayout());
@@ -225,8 +222,6 @@ public class ProfilWindow extends JFrame {
         southButtonsPanel.add(saveButton, BorderLayout.CENTER);
         southButtonsPanel.add(deleteButton, BorderLayout.EAST);
         centerPanel.add(southButtonsPanel, BorderLayout.SOUTH);
-
-
 
 
         //init stats panel
@@ -255,13 +250,20 @@ public class ProfilWindow extends JFrame {
         chartPanelCo.setPreferredSize(new java.awt.Dimension(150, 150));
         statsPanel.add(chartPanelCo);
 
-
         JScrollPane statsScrollPane= new JScrollPane(statsPanel);
 
-
-
-
-
+        onlineCheckbox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                profilWindowController.sendMessage("/ChangeStatus:online");
+            }
+        });
+        awayCheckbox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                profilWindowController.sendMessage("/ChangeStatus:away");
+            }
+        });
 
         statsButton.addActionListener(new ActionListener() {
             @Override
@@ -272,7 +274,6 @@ public class ProfilWindow extends JFrame {
 
                 centerPanel.add(statsLabel, BorderLayout.NORTH);
                 centerPanel.add(statsScrollPane,BorderLayout.CENTER);
-
 
                 setContentPane(mainPanel);
 

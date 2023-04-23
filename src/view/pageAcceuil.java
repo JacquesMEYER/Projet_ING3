@@ -258,6 +258,37 @@ public class pageAcceuil extends JFrame implements ActionListener {
             userButtonsPanel.revalidate();
             userButtonsPanel.repaint();
         }
+        for (String nom : awayNamesSet) {
+            if (!Objects.equals(nom, "unknown")) {
+
+                if (Objects.equals(nom, messageController.getModel().getUser().getUsername())) {
+                    nomV2 = nom + " (me)";
+                } else nomV2 = nom;
+
+                JButton userButton = new JButton(nomV2);
+
+                userButton.setBackground(Color.ORANGE);
+
+                userButtons.add(userButton);
+                userButtonsPanel.add(userButton);
+
+
+                userButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+
+                        parametter parametter = new parametter(userButton.getText(), messageController);
+                        parametter.setVisible(true);
+                    }
+
+                });
+
+            }
+
+
+            userButtonsPanel.revalidate();
+            userButtonsPanel.repaint();
+        }
         for (String nom : decoNamesSet) {
             if (!Objects.equals(nom, "unknown")) {
 
@@ -289,37 +320,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
             userButtonsPanel.revalidate();
             userButtonsPanel.repaint();
         }
-        for (String nom : awayNamesSet) {
-            if (!Objects.equals(nom, "unknown")) {
 
-                if (Objects.equals(nom, messageController.getModel().getUser().getUsername())) {
-                    nomV2 = nom + " (me)";
-                } else nomV2 = nom;
-
-                JButton userButton = new JButton(nomV2);
-
-                    userButton.setBackground(Color.ORANGE);
-
-                    userButtons.add(userButton);
-                    userButtonsPanel.add(userButton);
-
-
-                    userButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-
-                            parametter parametter = new parametter(userButton.getText(), messageController);
-                            parametter.setVisible(true);
-                        }
-
-                    });
-
-            }
-
-
-            userButtonsPanel.revalidate();
-            userButtonsPanel.repaint();
-        }
     }
     private void sendMessage(String mess) {
 

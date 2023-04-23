@@ -288,11 +288,11 @@ public class Server {
             }
         }
     }
-    public static void setStatus(String name) {
+    public static void setStatus(String name,String Status) {
     try{
         Connection conn = ConnectionDB.getConnection();
         UserDAO userDao = new UserDAO(conn);
-        userDao.setStatus(name, "OFFLINE");
+        userDao.setStatus(name, Status);
 
     } catch (SQLException e) {
         throw new RuntimeException(e);
