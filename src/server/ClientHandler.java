@@ -10,6 +10,8 @@ import java.net.Socket;
 import java.sql.Connection;
 import java.util.Arrays;
 
+import static model.Utilisateur.Status.OFFLINE;
+
 class ClientHandler implements Runnable {
     private Socket clientSocket;
     private PrintWriter writer;
@@ -110,6 +112,7 @@ class ClientHandler implements Runnable {
             System.err.println("Erreur lors de la réception du message : " + e.getMessage());
         } finally {
             Server.broadcastMessage("* " + username + " has left the chat *");
+            Server.setStatus(username);
             Server.clientHandlers.remove(this);
             Server.afficherQuiEstCo(); //mettre a jour les boutons des autres
 

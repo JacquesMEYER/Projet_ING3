@@ -20,7 +20,7 @@ import java.util.*;
 
 
 public class pageAcceuil extends JFrame implements ActionListener {
-    private static Set<String> nomsCo = new HashSet<>(Arrays.asList("-"));
+    private static Set<String> allNames = new HashSet<>(Arrays.asList("-"));
     JEditorPane chatArea;
     JPanel userButtonsPanel;
     JTextField messageField;
@@ -77,7 +77,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
         JScrollPane userButtonScrollPane = new JScrollPane(userButtonsPanel);
 
 
-        for (String nom : nomsCo) {
+        for (String nom : allNames) {
             JButton userButton = new JButton(nom);
 
             userButtons.add(userButton); //ajout au vecteur
@@ -225,39 +225,102 @@ public class pageAcceuil extends JFrame implements ActionListener {
         return LocalTime.now().format(formatter);
     }
 
-    public void updateUserButtons(Set<String> nomsCo, JPanel userButtonsPanel, Set<String> vrmtCo) {
+    public void updateUserButtons(JPanel userButtonsPanel,Set<String> allUsersSet,Set<String> coNamesSet,Set<String> decoNamesSet,Set<String> awayNamesSet) {
 
         userButtonsPanel.removeAll();
         String nomV2 = "";
-        for (String nom : nomsCo) {
+        for (String nom : coNamesSet) {
+
             if (!Objects.equals(nom, "unknown")) {
-                if (nom == messageController.getModel().getUser().getUsername()) {
+
+                if (Objects.equals(nom, messageController.getModel().getUser().getUsername())) {
                     nomV2 = nom + " (me)";
                 } else nomV2 = nom;
+
                 JButton userButton = new JButton(nomV2);
-                if (vrmtCo.contains(nom)) {
+
                     userButton.setBackground(Color.GREEN);
-                } else userButton.setBackground(Color.PINK);
-                userButtons.add(userButton);
+                    userButtons.add(userButton);
+                    userButtonsPanel.add(userButton);
+                    userButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
 
-                userButtonsPanel.add(userButton);
+                            parametter parametter = new parametter(userButton.getText(), messageController);
+                            parametter.setVisible(true);
+                        }
 
-                userButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
+                    });
 
-                        parametter parametter = new parametter(userButton.getText(), messageController);
-                        parametter.setVisible(true);
-                    }
-
-                });
             }
+
+
+            userButtonsPanel.revalidate();
+            userButtonsPanel.repaint();
         }
+        for (String nom : decoNamesSet) {
+            if (!Objects.equals(nom, "unknown")) {
 
-        userButtonsPanel.revalidate();
-        userButtonsPanel.repaint();
+                if (Objects.equals(nom, messageController.getModel().getUser().getUsername())) {
+                    nomV2 = nom + " (me)";
+                } else nomV2 = nom;
+
+                JButton userButton = new JButton(nomV2);
+
+                    userButton.setBackground(Color.RED);
+
+                    userButtons.add(userButton);
+                    userButtonsPanel.add(userButton);
+
+
+                    userButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+
+                            parametter parametter = new parametter(userButton.getText(), messageController);
+                            parametter.setVisible(true);
+                        }
+
+                    });
+
+            }
+
+
+            userButtonsPanel.revalidate();
+            userButtonsPanel.repaint();
+        }
+        for (String nom : awayNamesSet) {
+            if (!Objects.equals(nom, "unknown")) {
+
+                if (Objects.equals(nom, messageController.getModel().getUser().getUsername())) {
+                    nomV2 = nom + " (me)";
+                } else nomV2 = nom;
+
+                JButton userButton = new JButton(nomV2);
+
+                    userButton.setBackground(Color.ORANGE);
+
+                    userButtons.add(userButton);
+                    userButtonsPanel.add(userButton);
+
+
+                    userButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+
+                            parametter parametter = new parametter(userButton.getText(), messageController);
+                            parametter.setVisible(true);
+                        }
+
+                    });
+
+            }
+
+
+            userButtonsPanel.revalidate();
+            userButtonsPanel.repaint();
+        }
     }
-
     private void sendMessage(String mess) {
 
         String message = messageField.getText();
@@ -310,8 +373,8 @@ public class pageAcceuil extends JFrame implements ActionListener {
         sendMessageLeft(message + "\n");
     }
 
-    public void setNomsCo(Set<String> nomsCo) {
-        pageAcceuil.nomsCo = nomsCo;
+    public void setAllNames(Set<String> nomsCo) {
+        pageAcceuil.allNames = nomsCo;
     }
 
     @Override
@@ -327,8 +390,8 @@ public class pageAcceuil extends JFrame implements ActionListener {
         Timer timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                nomsCo = messageController.getNomsCo();
-                updateUserButtons(nomsCo, userButtonsPanel, messageController.getVrmtCo());
+                allNames = messageController.getAllNames();
+                updateUserButtons(userButtonsPanel, messageController.getAllNames(),messageController.getCoNamesSet(),messageController.getDecoNamesSet(),messageController.getAwayNamesSet());
             }
         });
         timer.start();

@@ -21,13 +21,15 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import static model.Utilisateur.Status.OFFLINE;
 import static model.Utilisateur.UserType.*;
 
 public class Server {
 
     private static final int SERVER_PORT = 9999;
     //private static final String SERVER_IP ="172.20.10.3";
-    private static final String SERVER_IP = "192.168.1.34"; //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = "192.168.1.37";
+            //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -286,6 +288,15 @@ public class Server {
             }
         }
     }
+    public static void setStatus(String name) {
+    try{
+        Connection conn = ConnectionDB.getConnection();
+        UserDAO userDao = new UserDAO(conn);
+        userDao.setStatus(name, "OFFLINE");
 
+    } catch (SQLException e) {
+        throw new RuntimeException(e);
+    }
 
+    }
 }
