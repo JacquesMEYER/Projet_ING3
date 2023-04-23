@@ -42,12 +42,16 @@ public class MessageController extends BaseController {
     public void update(Observable o, Object arg) {
         String message = (String) arg;
 
-        if (message.startsWith("co:")) {
+        if (message.startsWith("/co:")) {
+
+            /*
             String[] noms = message.substring("co:".length()).split(" ");
             nomsCo.addAll(Arrays.asList(noms));
             vrmtCo = new HashSet<>(Arrays.asList(noms));
             view.setNomsCo(nomsCo);
             view.updateUserButtons(nomsCo, view.getUserButtonsPanel(), vrmtCo); // Appelez la méthode updateUserButtons ici
+            */
+
         } else if (message.equals("The user has an account")) {
         } else if (message.equals("The user has no account")) {
         } else if (message.startsWith("/GIF:")) {

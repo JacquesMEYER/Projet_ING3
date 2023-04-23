@@ -27,8 +27,7 @@ public class Server {
 
     private static final int SERVER_PORT = 9999;
     //private static final String SERVER_IP ="172.20.10.3";
-    private static final String SERVER_IP = "10.188.41.187";
-    //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -81,14 +80,22 @@ public class Server {
     }
 
     public static void broadcastMessage(String message) {
-        for (ClientHandler handler : clientHandlers) {
-            if (bannedUser.contains(handler.getUsername())) {
-                handler.getWriter().println("pas de message pour toi, t'es banni!!!!!");
-            } else {
-                handler.getWriter().println(message);
-            }
-        }
+        try {
+            Connection conn = ConnectionDB.getConnection();
+            MessageDAO msgDAO = new MessageDAO(conn);
+            msgDAO.addMsg(message);
 
+            for (ClientHandler handler : clientHandlers) {
+                if (bannedUser.contains(handler.getUsername())) {
+                    handler.getWriter().println("pas de message pour toi, t'es banni!!!!!");
+                } else {
+                    handler.getWriter().println(message);
+                }
+            }
+
+        } catch (SQLException e) {
+        throw new RuntimeException(e);
+        }
     }
 
     public static void addBanned(String username) {
@@ -117,21 +124,18 @@ public class Server {
     }
 
     public static void afficherQuiEstCo() { //sans affichage , que pour les boutons
+        String userStatus;
+        try {
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDao = new UserDAO(conn);
 
-        String noms = "";
-        int i = 0;
-        for (ClientHandler handler : clientHandlers) {
-            if (i == 0) {
-                noms = noms + handler.getUsername();
-            } else noms = noms + " " + handler.getUsername();
-            i++;
-        }
-        // System.out.println(noms);
-        //System.out.println(userSender);
-        for (ClientHandler handler : clientHandlers) {
-            // if (handler.getUsername().equalsIgnoreCase(userSender)) {
-            handler.getWriter().println("co:" + noms);
-            //}
+            userStatus = userDao.getListUserCo();
+
+            for (ClientHandler handler : clientHandlers) {
+                handler.getWriter().println(userStatus);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -157,12 +161,15 @@ public class Server {
     public static void isValidUser(String username, String password) {
         boolean isValid = false;
         Utilisateur.UserType type = null;
+        String msg = null;
 
         try {
             Connection conn = ConnectionDB.getConnection();
             UserDAO userDao = new UserDAO(conn);
+            //MessageDAO msgDAO = new MessageDAO(conn);
             isValid = userDao.isValidUser(username, password);
             type = userDao.getUserTypeByUsername(username);
+            //msg = msgDAO.getAllMessages();
 
             if (isValid) {
                 for (ClientHandler handler : clientHandlers) {
@@ -170,7 +177,6 @@ public class Server {
                         handler.getWriter().println("The user has an account" + type);
                         handler.setUsername(username);
                         broadcastMessage("* " + username + " has entered the chat *");
-
                         break;
                     }
                 }
@@ -218,20 +224,20 @@ public class Server {
         }
     }
 
-    public static void changeType(String targetUsername, String type, String userSender) {
+    public static void changeType(String targetUsername, Utilisateur.UserType type, String userSender) {
         if(Objects.equals(type, "classic")){
-            type = String.valueOf(CLASSIC);
+            type = Utilisateur.UserType.valueOf(String.valueOf(CLASSIC));
         }
         if(Objects.equals(type, "admin")){
-            type = String.valueOf(ADMINISTRATOR);
+            type = Utilisateur.UserType.valueOf(String.valueOf(ADMINISTRATOR));
         }
         if(Objects.equals(type, "moderator")){
-            type = String.valueOf(MODERATOR);
+            type = Utilisateur.UserType.valueOf(String.valueOf(MODERATOR));
         }
         try {
             Connection conn = ConnectionDB.getConnection();
             UserDAO userDao = new UserDAO(conn);
-            userDao.updateUserTypeByUsername(targetUsername, type);
+            userDao.updateUserTypeByUsername(targetUsername, String.valueOf(type));
 
             for (ClientHandler handler : clientHandlers) {
                 if (handler.getUsername().equalsIgnoreCase(targetUsername)) {
