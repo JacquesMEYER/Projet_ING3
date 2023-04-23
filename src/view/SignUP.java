@@ -65,7 +65,7 @@ public class SignUP extends JFrame implements ActionListener, Observer {
 
             signUpController.sendMessage("/testInscription: " + username + " " + password);
 
-            Boolean userIsCorrect = signUpController.getUserIsCorrect(2, TimeUnit.SECONDS);
+            Boolean userIsCorrect = signUpController.getUserIsCorrect(3, TimeUnit.SECONDS);
 
             // Vérifier si les informations d'inscription sont valides
             if (username.isEmpty() || password.isEmpty()) {

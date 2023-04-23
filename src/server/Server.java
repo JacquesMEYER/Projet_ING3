@@ -28,8 +28,8 @@ public class Server {
 
     private static final int SERVER_PORT = 9999;
     //private static final String SERVER_IP ="172.20.10.3";
-    private static final String SERVER_IP = "192.168.1.37";
-            //IPAddress.getIpAddress().getHostAddress(); // retourne l'adress ip de ton ordi
+    private static final String SERVER_IP = IPAddress.getIpAddress().getHostAddress();//"192.168.1.37";
+             // retourne l'adress ip de ton ordi
 
     static Set<String> bannedUser = new HashSet<>();
 
@@ -101,20 +101,41 @@ public class Server {
     }
 
     public static void addBanned(String username) {
-        bannedUser.add(username);
+        try {
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDAO = new UserDAO(conn);
+
+            userDAO.setBan(username, true);
+
+            bannedUser.add(username);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void unBan(String username) {
-        bannedUser.remove(username);
+        try {
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDAO = new UserDAO(conn);
+
+            userDAO.setBan(username, false);
+
+            bannedUser.remove(username);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static Boolean IsBanned(String username) {
-        for (String banned : bannedUser) {
-            if (username.equalsIgnoreCase(banned)) {
-                return true;
-            }
+        try {
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDAO = new UserDAO(conn);
+
+            return userDAO.getBan(username);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return false;
     }
 
     public static void sendMessageTBanned(String username) {
@@ -171,7 +192,6 @@ public class Server {
             //MessageDAO msgDAO = new MessageDAO(conn);
             isValid = userDao.isValidUser(username, password);
             type = userDao.getUserTypeByUsername(username);
-            System.out.println(type);
             //msg = msgDAO.getAllMessages();
 
             if (isValid) {
@@ -181,7 +201,6 @@ public class Server {
                         handler.setUsername(username);
                         broadcastMessage("* " + username + " has entered the chat *");
                         userDao.setStatus(username, String.valueOf(Utilisateur.Status.ONLINE));
-                        userDao.nbUsers();
                         break;
                     }
                 }
@@ -278,14 +297,21 @@ public class Server {
     }
 
     public static void changeProfil(String newUsername, String newPassword, String userSender) {
-        broadcastMessage("* " + userSender + " has changed his/her name to " + newUsername+" *");
+        try {
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDao = new UserDAO(conn);
+            userDao.updateUser(newUsername, newPassword, userSender);
 
-        //APPELER DAO
-        for (ClientHandler handler : clientHandlers) {
-            if (handler.getUsername().equalsIgnoreCase(userSender)) {
-                handler.setUsername(newUsername);
-                break;
+            broadcastMessage("* " + userSender + " has changed his/her name to " + newUsername+" *");
+
+            for (ClientHandler handler : clientHandlers) {
+                if (handler.getUsername().equalsIgnoreCase(userSender)) {
+                    handler.setUsername(newUsername);
+                    break;
+                }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
     public static void setStatus(String name,String Status) {
@@ -304,7 +330,7 @@ public class Server {
         try{
             Connection conn = ConnectionDB.getConnection();
             UserDAO userDao = new UserDAO(conn);
-         //   userDao.deleteUser(name);
+            userDao.deleteUser(name);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

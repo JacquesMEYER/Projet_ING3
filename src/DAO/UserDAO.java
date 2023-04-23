@@ -15,7 +15,6 @@ public class UserDAO implements DAO<Utilisateur> {
     public UserDAO(Connection connection){
         this.conn = connection;
     }
-
     public Utilisateur.UserType getUserTypeByUsername(String username) {
         Utilisateur.UserType type = null;
 
@@ -160,16 +159,19 @@ public class UserDAO implements DAO<Utilisateur> {
         }
     }
 
-    /*public void updateUser(Utilisateur user) {
+    public void updateUser(String newName, String newPwd, String name) {
         //code pour mettre à jour un utilisateur
         try {
-            Statement stmt = this.conn.createStatement();
-            String query = "UPDATE user(username, pwd, type) SET ('" + user.getUsername() + "', '" + user.getPassword() + "', '" + user.getUserType() + "')";
-            stmt.executeUpdate(query);
+            PreparedStatement stmt = conn.prepareStatement("UPDATE user SET username = ?, pwd = ? WHERE username = ?");
+            stmt.setString(1, newName);
+            stmt.setString(2, hashPassword(newPwd));
+            stmt.setString(3, name);
+            stmt.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }*/
+    }
 
     public boolean isValidUser(String username, String password) throws NoSuchAlgorithmException {
         // cryptage du mot de passe écrit par l'utilisateur
@@ -196,8 +198,46 @@ public class UserDAO implements DAO<Utilisateur> {
         }
     }
 
-    public void deleteUser(Utilisateur user) {
+    public void setBan(String name, boolean isBan) {
+        try {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE user SET ban = ? WHERE username = ?");
+            stmt.setBoolean(1, isBan);
+            stmt.setString(2, name);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean getBan(String name) {
+        Boolean isBan = false;
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT ban FROM user WHERE username = ?");
+            stmt.setString(1, name);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                isBan = rs.getBoolean("ban");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return isBan;
+    }
+
+    public void deleteUser(String name) {
         //code pour supprimer un utilisateur
+        try {
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM user WHERE username = ?");
+            statement.setString(1, name);
+            statement.executeUpdate();
+            System.out.println("vous avez delete");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
