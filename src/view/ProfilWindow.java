@@ -302,7 +302,12 @@ public class ProfilWindow extends JFrame {
 
             }
         });
-
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                profilWindowController.sendMessage("/DeleteAccount");
+            }
+        });
 
         mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(centerPanel, BorderLayout.CENTER);

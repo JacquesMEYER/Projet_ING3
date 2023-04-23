@@ -105,6 +105,8 @@ class ClientHandler implements Runnable {
                         Server.setStatus(username,"ONLINE");
                     }else if (onlyTheMessage.startsWith("/ChangeStatus:away")) {
                         Server.setStatus(username,"AWAY");
+                    }else if (onlyTheMessage.startsWith("/DeleteAccount")) {
+                        Server.deleteUser(username);
                     } else {
                         Server.broadcastMessage(userSender + ": " + onlyTheMessage);
                     }

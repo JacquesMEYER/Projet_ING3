@@ -299,4 +299,16 @@ public class Server {
     }
 
     }
+
+    public static void deleteUser(String name) {
+        try{
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDao = new UserDAO(conn);
+         //   userDao.deleteUser(name);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
