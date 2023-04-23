@@ -41,17 +41,13 @@ public class UserDAO implements DAO<Utilisateur> {
         return null;
     }
 
-    public void setOnline(Utilisateur user) {
-
-    }
-
-    public void setOffline(String name) {
-        Utilisateur.Status status = OFFLINE;
+    public void setStatus(String name, String status) {
 
         try {
-            Statement stmt = conn.createStatement();
-            String query = "UPDATE status = '" + status + "' SET user WHERE username = '" + name + "' ";
-            stmt.executeUpdate(query);
+            PreparedStatement stmt = conn.prepareStatement("UPDATE user SET status = ? WHERE username = ?");
+            stmt.setString(1, status);
+            stmt.setString(2, name);
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -100,7 +96,7 @@ public class UserDAO implements DAO<Utilisateur> {
         }
     }
 
-    public int nbUsers() {
+    public int nbUsers() {// nb personnes par status ADMIN, AWAY
         int nbLignes = 0;
         try {
             Statement stmt = this.conn.createStatement();
@@ -114,6 +110,7 @@ public class UserDAO implements DAO<Utilisateur> {
             throw new RuntimeException(e);
         }
         return nbLignes;
+
     }
 
     public static String hashPassword(String password) {

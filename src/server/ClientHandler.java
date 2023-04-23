@@ -91,7 +91,7 @@ class ClientHandler implements Runnable {
                         String[] parts = onlyTheMessage.split("\\s+"); // Divise la chaîne en fonction des espaces
                         String targetUsername = parts[1];
                         String type = parts[2];
-                        Server.changeType(targetUsername,Enum.valueOf(Utilisateur.UserType.class, type), userSender);
+                        Server.changeType(targetUsername, type, userSender);
                     }else if (onlyTheMessage.startsWith("/bannedUsers:")) {
                         Server.returnBannedUsers(userSender);
                     }else if (onlyTheMessage.startsWith("/MAJProfil")) {
