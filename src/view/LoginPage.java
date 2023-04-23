@@ -29,7 +29,6 @@ public class LoginPage extends JFrame implements ActionListener{
         super("LOGIN");
         this.loginController = loginController;
 
-
         // Initialiser les champs de texte et le bouton
         usernameField = new JTextField(20);
         passwordField = new JPasswordField(20);
@@ -43,9 +42,27 @@ public class LoginPage extends JFrame implements ActionListener{
         // Ajouter des écouteurs d'événements pour le bouton d'inscription
         registerButton.addActionListener(this);
         loginButton.addActionListener(this);
+
+
+        // Créer un nouveau JPanel pour contenir le logo et les champs de texte et le bouton
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        // Créer un JLabel pour contenir l'image
+        JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JLabel logoLabel = new JLabel();
+        ImageIcon icon = new ImageIcon("images/GuyChat.png");
+        setIconImage(icon.getImage());
+        Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        logoLabel.setIcon(new ImageIcon(img));
+        logoPanel.add(logoLabel);
+
+        // Ajouter le JLabel à la partie supérieure du main panel
+        mainPanel.add(logoPanel, BorderLayout.NORTH);
+
         // Créer un nouveau JPanel pour contenir les champs de texte et le bouton
         JPanel registerPanel = new JPanel(new GridLayout(3, 1));
 
+        // Ajouter les composants de la même manière que dans notre code existant
         JLabel cusername = new JLabel("Username :");
         cusername.setForeground(bleufonce3);
         registerPanel.add(cusername);
@@ -59,12 +76,13 @@ public class LoginPage extends JFrame implements ActionListener{
         registerPanel.add(registerButton);
         registerPanel.add(loginButton);
 
-        // Définir la couleur d'arrière-plan de la fenêtre et du JPanel
-        registerPanel.setBackground(bleuclair);
-        getContentPane().add(registerPanel, BorderLayout.CENTER);
-        getContentPane().setBackground(Color.red);
+        // Ajouter le JPanel des champs de texte et le bouton à la partie centrale du JPanel principal
+        mainPanel.add(registerPanel, BorderLayout.CENTER);
 
-        // Définir les propriétés de la fenêtre JFrame
+        // Définir la couleur d'arrière-plan de la fenêtre et du JPanel principal
+        mainPanel.setBackground(bleuclair);
+        getContentPane().add(mainPanel);
+
         pack();
         setVisible(true);
         setLocationRelativeTo(null);
@@ -93,13 +111,11 @@ public class LoginPage extends JFrame implements ActionListener{
                     loginController.setUsername(username);
                     loginController.setUserPassword(password);
                     JOptionPane.showMessageDialog(this, "Connexion sucess !");
-
                     MessageController messageController = new MessageController(loginController.getModel());
                     pageAcceuil view2 = new pageAcceuil(messageController);
                     messageController.setView(view2);
                     dispose();
                     view2.setVisible(true);
-
                 } else {
                     JOptionPane.showMessageDialog(this, "Incorrect user or password.");
                 }
