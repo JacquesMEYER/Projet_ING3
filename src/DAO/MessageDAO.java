@@ -39,7 +39,7 @@ public class MessageDAO<Message> {
 
             try {
                 Statement stmt = this.conn.createStatement();
-                String queryMsg = "INSERT INTO message(text) VALUES('" + onlyTheMessage + "')";
+                String queryMsg = "INSERT INTO message(userSender, text) VALUES('" + userSender + "','" + onlyTheMessage + "')";
                 stmt.executeUpdate(queryMsg);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
