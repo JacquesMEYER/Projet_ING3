@@ -62,7 +62,7 @@ public class pageAcceuil extends JFrame implements ActionListener {
 
                 ProfilWindowController profilWindowController = new ProfilWindowController(messageController.getModel());
                 ProfilWindow view2 = new ProfilWindow(profilWindowController);
-                profilWindowController.setView(view2);
+                profilWindowController.setView(view2, pageAcceuil.this);
                 view2.setVisible(true);
             }
         });

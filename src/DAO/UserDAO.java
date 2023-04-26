@@ -30,18 +30,15 @@ public class UserDAO implements DAO<Utilisateur> {
             } else {
                 System.out.println("problème de lecture du type dans la bdd");
             }
+            rs.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return type;
     }
 
-    public List<Utilisateur> getAllUsers() {
-        return null;
-    }
-
     public void setStatus(String name, String status) {
-
+        //  met à jour le statut d'un utilisateur dans la bdd
         try {
             PreparedStatement stmt = conn.prepareStatement("UPDATE user SET status = ? WHERE username = ?");
             stmt.setString(1, status);
@@ -53,7 +50,7 @@ public class UserDAO implements DAO<Utilisateur> {
         }
     }
 
-    public String getListUserCo() {
+    public String getListUserCo() { // récupère la liste des utilisateurs connectés (ONLINE), déconnectés (OFFLINE) et absents (AWAY) à partir de la base de données
         String userCo = "", userDeco = "", userAway = "", listStatusUsers = "", nomCo = "", nomDeco = "", nomAway = "";
         try {
             PreparedStatement stmt = conn.prepareStatement("SELECT username, status FROM user");
@@ -63,6 +60,7 @@ public class UserDAO implements DAO<Utilisateur> {
                 String status = rs.getString("status");
                 String username = rs.getString("username");
 
+                // if pour stocker dans 3 variables différents les différents statuts
                 if (status.equals(String.valueOf(ONLINE))) {
                     userCo += username + " ";
                 } else if (status.equals(String.valueOf(OFFLINE))) {
@@ -71,7 +69,8 @@ public class UserDAO implements DAO<Utilisateur> {
                     userAway += username + " ";
                 }
             }
-
+            rs.close();
+            // retourne une chaîne de caractères contenant les noms d'utilisateurs correspondants
             listStatusUsers = "/co: " + userCo + "usernameDeco: " + userDeco + "usernameAway: " + userAway;
 
         } catch (SQLException e) {
@@ -85,7 +84,7 @@ public class UserDAO implements DAO<Utilisateur> {
     public void updateUserTypeByUsername(String name, String type) {
         //code pour mettre à jour le type de l'utilisateur
 
-        try {
+        try { // utilisation d'un objet Statement pour exécuter une requête SQL avec le nouveau type d'utilisateur et le nom d'utilisateur, et mettre à jour la bdd en conséquence
             Statement stmt = conn.createStatement();
             String query = "UPDATE user SET type = '" + Enum.valueOf(Utilisateur.UserType.class, type) + "' WHERE username = '" + name + "'";
             stmt.executeUpdate(query);
@@ -95,24 +94,65 @@ public class UserDAO implements DAO<Utilisateur> {
         }
     }
 
-    public int nbUsers() {// nb personnes par status ADMIN, AWAY
-        int nbLignes = 0;
+    public String nbStats() { // récupère le nombre d'utilisateurs avec différents statuts (ban, ONLINE, OFFLINE, AWAY) et types (ADMINISTRATOR, MODERATOR, CLASSIC) à partir de la bdd
+        int nbBan = 0, nbOFF = 0, nbON = 0, nbAway = 0, nbAdmin = 0, nbMod = 0, nbClassic = 0;
+        String result;
         try {
+            // differentes requetes pour compter le nombre d'utilisateurs correspondants pour chaque statut et type
             Statement stmt = this.conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS 'username' FROM user");
-
-            if(rs.next()) {
-                nbLignes = rs.getInt("username");
+            ResultSet rsBan = stmt.executeQuery("SELECT COUNT(*) AS ban FROM user WHERE ban = 1");
+            if (rsBan.next()) {
+                nbBan = rsBan.getInt("ban");
             }
+            rsBan.close(); // Fermer le ResultSet après avoir obtenu les données nécessaires
+
+            ResultSet rsOFF = stmt.executeQuery("SELECT COUNT(*) AS status FROM user WHERE status = 'OFFLINE'");
+            if (rsOFF.next()) {
+                nbOFF = rsOFF.getInt("status");
+            }
+            rsOFF.close(); // Fermer le ResultSet après avoir obtenu les données nécessaires
+
+            ResultSet rsON = stmt.executeQuery("SELECT COUNT(*) AS status FROM user WHERE status = 'ONLINE'");
+            if (rsON.next()) {
+                nbON = rsON.getInt("status");
+            }
+            rsON.close(); // Fermer le ResultSet après avoir obtenu les données nécessaires
+
+            ResultSet rsAway = stmt.executeQuery("SELECT COUNT(*) AS status FROM user WHERE status = 'AWAY'");
+            if (rsAway.next()) {
+                nbAway = rsAway.getInt("status");
+            }
+            rsAway.close(); // Fermer le ResultSet après avoir obtenu les données nécessaires
+
+            ResultSet rsAdmin = stmt.executeQuery("SELECT COUNT(*) AS type FROM user WHERE type = 'ADMINISTRATOR'");
+            if (rsAdmin.next()) {
+                nbAdmin = rsAdmin.getInt("type");
+            }
+            rsAdmin.close(); // Fermer le ResultSet après avoir obtenu les données nécessaires
+
+            ResultSet rsMod = stmt.executeQuery("SELECT COUNT(*) AS type FROM user WHERE type = 'MODERATOR'");
+            if (rsMod.next()) {
+                nbMod = rsMod.getInt("type");
+            }
+            rsMod.close(); // Fermer le ResultSet après avoir obtenu les données nécessaires
+
+            ResultSet rsClassic = stmt.executeQuery("SELECT COUNT(*) AS type FROM user WHERE type = 'CLASSIC'");
+            if (rsClassic.next()) {
+                nbClassic = rsClassic.getInt("type");
+            }
+            rsClassic.close(); // Fermer le ResultSet après avoir obtenu les données nécessaires
+
+            // retourne une chaine de caractere contenant les nb d'utilisateur de chaque statut et type
+            result = nbBan + " " + nbON + " " + nbOFF + " " + nbAway + " " + nbAdmin + " " + nbMod + " " + nbClassic;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return nbLignes;
+        return result;
 
     }
-
     public static String hashPassword(String password) {
+        // cryptage du mot de passe lors du sign up et login
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             md.update(password.getBytes());
@@ -129,6 +169,7 @@ public class UserDAO implements DAO<Utilisateur> {
     }
 
     public boolean isCorrectUser(String name, String pwd) {
+        // retourne si un utilisateur est correct ou non lors du login (comparaison du pwd et username)
         try {
             PreparedStatement statement0 = conn.prepareStatement("SELECT username FROM user WHERE username = ?");
             PreparedStatement statement1 = conn.prepareStatement("SELECT pwd FROM user WHERE pwd = ?");
@@ -199,6 +240,7 @@ public class UserDAO implements DAO<Utilisateur> {
     }
 
     public void setBan(String name, boolean isBan) {
+        // mettre a jour le ban dans la bdd quand un utilisateur est ban
         try {
             PreparedStatement stmt = conn.prepareStatement("UPDATE user SET ban = ? WHERE username = ?");
             stmt.setBoolean(1, isBan);
@@ -211,6 +253,7 @@ public class UserDAO implements DAO<Utilisateur> {
     }
 
     public boolean getBan(String name) {
+        // recuperer si un utilisateur est ban ou non
         Boolean isBan = false;
 
         try {
@@ -221,6 +264,7 @@ public class UserDAO implements DAO<Utilisateur> {
             if(rs.next()) {
                 isBan = rs.getBoolean("ban");
             }
+            rs.close();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -229,7 +273,7 @@ public class UserDAO implements DAO<Utilisateur> {
     }
 
     public void deleteUser(String name) {
-        //code pour supprimer un utilisateur
+        //suppression un utilisateur dans la bdd (enleve toute la ligne de la table)
         try {
             PreparedStatement statement = conn.prepareStatement("DELETE FROM user WHERE username = ?");
             statement.setString(1, name);
@@ -240,6 +284,7 @@ public class UserDAO implements DAO<Utilisateur> {
         }
     }
 
+    // methodes filles de l'interface DAO
     @Override
     public Utilisateur get(int id) {
         return null;

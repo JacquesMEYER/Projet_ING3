@@ -326,6 +326,23 @@ public class Server {
 
     }
 
+    public static void majStatProfil() {
+        String stats;
+        try{
+            Connection conn = ConnectionDB.getConnection();
+            UserDAO userDao = new UserDAO(conn);
+
+            stats = userDao.nbStats();
+
+            for (ClientHandler handler : clientHandlers) {
+                handler.getWriter().println("/nbDiag: " + stats);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void deleteUser(String name) {
         try{
             Connection conn = ConnectionDB.getConnection();
@@ -335,6 +352,5 @@ public class Server {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
