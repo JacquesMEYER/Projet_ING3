@@ -25,10 +25,6 @@ public class LoginController extends BaseController implements Observer {
     public void setView(LoginPage view) { // lie le login page au controller
         this.view = view;
     }
-
-
-
-
     public void setUsername(String username) {
         // met a jour le nom de l'utilisateur lors de la connexion a l'app
         model.getUser().setUsername(username);
